@@ -9,36 +9,96 @@
           <div class="title">
             <h2>Favorites</h2>
           </div>
+          <v-card>
+            <v-list-item-group
+              v-model="selected"
+              multiple
+              active-class="blue--text"
+            >
+              <template v-for="(item, index) in favorites">
+                <v-list-item :key="item.name">
+                  <template v-slot:default="{ active }">
+                    <v-list-item-content>
+                      <v-list-item-title v-text="item.name"></v-list-item-title>
+                      <v-list-item-subtitle
+                        class="text--primary"
+                        v-text="item.company"
+                      ></v-list-item-subtitle>
+                      <v-list-item-subtitle
+                        v-text="item.email"
+                      ></v-list-item-subtitle>
+                    </v-list-item-content>
+                    <v-list-item-action>
+                      <v-icon v-if="!active" color="grey lighten-1">
+                        star_border
+                      </v-icon>
+
+                      <v-icon v-else color="yellow">
+                        star
+                      </v-icon>
+                    </v-list-item-action>
+                  </template>
+                </v-list-item>
+                <v-divider
+                  v-if="index + 1 < items.length"
+                  :key="index"
+                ></v-divider>
+              </template>
+            </v-list-item-group>
+          </v-card>
           <v-spacer></v-spacer>
           <!-- Users -->
           <div class="title">
             <h2>Users</h2>
           </div>
+
+          <v-col cols="12">
+            <v-row :align="alignment" :justify="justify" class="grey lighten-5">
+              <v-card
+                v-for="(user, index) in users"
+                :key="index"
+                class="ma-2 pa-6"
+                outlined
+                tile
+              >
+                <v-card-title class="mb-0 px-0">{{ user.name }}</v-card-title>
+                <v-card-subtitle class="mb-0 px-0">{{
+                  user.company.name
+                }}</v-card-subtitle>
+                <v-card-text class="mb-0 px-0">{{ user.email }}</v-card-text>
+                <v-card-actions>
+                  <v-btn icon v-slot:default="{ active }">
+                    <v-icon v-if="!active" color="grey lighten-1">
+                      star_border
+                    </v-icon>
+                    <v-icon v-else color="yellow">
+                      star
+                    </v-icon>
+                  </v-btn>
+                </v-card-actions>
+              </v-card>
+            </v-row>
+          </v-col>
           <v-card>
             <v-list-item-group
               v-model="selected"
               multiple
-              active-class="pink--text"
+              active-class="blue--text"
             >
               <template v-for="(item, index) in items">
-                <v-list-item :key="item.title">
+                <v-list-item :key="item.name">
                   <template v-slot:default="{ active }">
                     <v-list-item-content>
-                      <v-list-item-title
-                        v-text="item.title"
-                      ></v-list-item-title>
+                      <v-list-item-title v-text="item.name"></v-list-item-title>
                       <v-list-item-subtitle
                         class="text--primary"
-                        v-text="item.headline"
+                        v-text="item.company"
                       ></v-list-item-subtitle>
                       <v-list-item-subtitle
-                        v-text="item.subtitle"
+                        v-text="item.email"
                       ></v-list-item-subtitle>
                     </v-list-item-content>
                     <v-list-item-action>
-                      <v-list-item-action-text
-                        v-text="item.action"
-                      ></v-list-item-action-text>
                       <v-icon v-if="!active" color="grey lighten-1">
                         star_border
                       </v-icon>
@@ -72,12 +132,25 @@ export default {
   components: {
     BreadCrumb,
   },
-  computed: {},
+  mounted() {
+    this.axios
+      .get(this.usersAPI)
+      .then(response => (this.users = response.data));
+  },
   data() {
     return {
+      users: [],
+      albums: [],
+      photos: [],
+      usersAPI: "https://jsonplaceholder.typicode.com/users",
+      albumsAPI: "https://jsonplaceholder.typicode.com/albums/",
+      photosAPI: this.albumsAPI + "/" + this.user + "/photos",
+      user: 0,
+      album: 0,
+      photo: 0,
       favorites: [
         {
-          name: "benny",
+          name: "Benny",
           company: "Bontouch AB",
           email: "benny.lam@bontouch.com",
         },
@@ -85,37 +158,24 @@ export default {
       selected: [2],
       items: [
         {
-          action: "15 min",
-          headline: "Brunch this weekend?",
-          title: "Ali Connors",
-          subtitle:
-            "I'll be in your neighborhood doing errands this weekend. Do you want to hang out?",
+          name: "Benny",
+          company: "Bontouch AB",
+          email: "Andreas@bontouch.com",
         },
         {
-          action: "2 hr",
-          headline: "Summer BBQ",
-          title: "me, Scrott, Jennifer",
-          subtitle: "Wish I could come, but I'm out of town this weekend.",
+          name: "Andreas",
+          company: "Bontouch AB",
+          email: "benny.lam@bontouch.com",
         },
         {
-          action: "6 hr",
-          headline: "Oui oui",
-          title: "Sandra Adams",
-          subtitle: "Do you have Paris recommendations? Have you ever been?",
+          name: "Karin",
+          company: "Bontouch AB",
+          email: "Karin@bontouch.com",
         },
         {
-          action: "12 hr",
-          headline: "Birthday gift",
-          title: "Trevor Hansen",
-          subtitle:
-            "Have any ideas about what we should get Heidi for her birthday?",
-        },
-        {
-          action: "18hr",
-          headline: "Recipe to try",
-          title: "Britta Holt",
-          subtitle:
-            "We should eat this: Grate, Squash, Corn, and tomatillo Tacos.",
+          name: "Claudia",
+          company: "Bontouch AB",
+          email: "Claudia@bontouch.com",
         },
       ],
     };
@@ -131,7 +191,8 @@ h2 {
   border-bottom: 1px solid lightgray;
   margin-bottom: 10px;
 }
-v-card {
+.v-card {
   margin-top: 20px;
+  margin-bottom: 50px;
 }
 </style>
