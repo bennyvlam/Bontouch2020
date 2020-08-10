@@ -4,7 +4,7 @@
       <v-row align="center" justify="center">
         <v-col cols="12" sm="8" md="9">
           <!-- Breadcrumb -->
-          <BreadCrumb class="mb-4"></BreadCrumb>
+          <BreadCrumb :currentRoute="currentRoute" class="mb-4"></BreadCrumb>
           <!-- Favorites -->
           <UserGrid :title="titleFavorites" :items="favorites"></UserGrid>
           <!-- Users -->
@@ -34,6 +34,7 @@ export default {
   data() {
     return {
       users: [],
+      currentRoute: this.$route.name,
       titleFavorites: "Favorites",
       titleUsers: "Users",
       albums: [],

@@ -17,6 +17,7 @@
               tile
               min-width="260px"
               color="blue lighten-4"
+              :to="'/Album'"
             >
               <v-row class="ma-0 pa-0">
                 <v-col class="ma-0 pa-0 mr-auto" cols="auto">
@@ -29,7 +30,7 @@
                   <v-card-actions>
                     <v-icon
                       small
-                      @click="favorite"
+                      @click.prevent="favorite"
                       v-if="!active"
                       color="blue-grey darken-2"
                     >
@@ -37,7 +38,7 @@
                     </v-icon>
                     <v-icon
                       small
-                      @click="favorite"
+                      @click.prevent="favorite"
                       v-else
                       color="blue-grey darken-2"
                     >
