@@ -15,18 +15,18 @@ export default {
     items: [
       {
         text: "Users",
-        disabled: false,
-        href: "/",
+        disabled: true,
+        href: "/"
       },
       {
         text: "this.user",
         disabled: false,
-        href: "/User/",
+        href: "/User/"
       },
       {
         text: "this.albumName",
-        disabled: true,
-        href: "/Album/",
+        disabled: false,
+        href: "/Album/"
       },
     ],
   }),

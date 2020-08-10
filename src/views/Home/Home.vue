@@ -2,18 +2,16 @@
   <div class="home">
     <v-container class="fill-height">
       <v-row align="center" justify="center">
-        <v-col cols="12" sm="8" md="8">
-          <BreadCrumb class="mb-4"></BreadCrumb>
+        <v-col cols="12" sm="8" md="9">
           <!-- Breadcrumb -->
+          <BreadCrumb class="mb-4"></BreadCrumb>
           <!-- Favorites -->
           <UserGrid :title="titleFavorites" :items="favorites"></UserGrid>
-
           <!-- Users -->
           <UserGrid :title="titleUsers" :items="users"></UserGrid>
         </v-col>
       </v-row>
     </v-container>
-    <!-- <HelloWorld msg="Welcome to Your Vue.js App" /> -->
   </div>
 </template>
 
@@ -49,7 +47,7 @@ export default {
       favorites: [
         {
           name: "Benny",
-          company: "Bontouch AB",
+          company: { name: "Bontouch AB" },
           email: "benny.lam@bontouch.com",
         },
       ],
@@ -69,11 +67,6 @@ export default {
           name: "Karin",
           company: "Bontouch AB",
           email: "Karin@bontouch.com",
-        },
-        {
-          name: "Claudia",
-          company: "Bontouch AB",
-          email: "Claudia@bontouch.com",
         },
       ],
     };
