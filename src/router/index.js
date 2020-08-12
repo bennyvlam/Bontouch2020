@@ -7,12 +7,13 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "Home",
+    name: "home",
     component: Home
   },
   {
-    path: "/user",
-    name: "User",
+    path: "/user/:userId",
+    name: "user",
+    props: true,
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
@@ -20,8 +21,9 @@ const routes = [
       import(/* webpackChunkName: "about" */ "../views/User/User.vue")
   },
   {
-    path: "/album",
-    name: "Album",
+    path: "/album/:albumId",
+    name: "album",
+    props: true,
     // route level code-splitting
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.

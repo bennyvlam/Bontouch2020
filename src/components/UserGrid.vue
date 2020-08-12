@@ -17,8 +17,9 @@
               tile
               min-width="260px"
               color="blue lighten-4"
-              :to="'/Album'"
+              :to="'/user/' + user.name.split(/[\s,\.]+/).join('')"
             >
+              <!-- @click="goTo(user.name, index)" -->
               <v-row class="ma-0 pa-0">
                 <v-col class="ma-0 pa-0 mr-auto" cols="auto">
                   <v-card-title
@@ -66,26 +67,18 @@
 <script>
 export default {
   name: "UserGrid",
-  props: ["title", "items"],
+  props: ["title", "items", "index"],
   data() {
     return {
       active: false,
-      alignmentsAvailable: ["start", "center", "end", "baseline", "stretch"],
-      alignment: "center",
-      dense: false,
-      justifyAvailable: [
-        "start",
-        "center",
-        "end",
-        "space-around",
-        "space-between",
-      ],
-      justify: "center",
     };
   },
   methods: {
-    goTo() {
-      this.$router.push("Album");
+    goTo(userName, index) {
+      this.$router.push({
+        name: "user",
+        params: { userId: userName.split(" ").join("") + index },
+      });
     },
     next() {
       alert("You clicked next!");

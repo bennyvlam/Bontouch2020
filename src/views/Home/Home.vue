@@ -2,9 +2,12 @@
   <div class="home">
     <v-container class="fill-height">
       <v-row align="center" justify="center">
-        <v-col cols="12" sm="8" md="9">
+        <v-col cols="12" sm="12" md="9">
           <!-- Breadcrumb -->
-          <BreadCrumb :currentRoute="currentRoute" class="mb-4"></BreadCrumb>
+          <BreadCrumb
+            :currentRoute="this.$route.name"
+            class="mb-4"
+          ></BreadCrumb>
           <!-- Favorites -->
           <UserGrid :title="titleFavorites" :items="favorites"></UserGrid>
           <!-- Users -->
@@ -34,17 +37,10 @@ export default {
   data() {
     return {
       users: [],
-      currentRoute: this.$route.name,
       titleFavorites: "Favorites",
       titleUsers: "Users",
-      albums: [],
-      photos: [],
       usersAPI: "https://jsonplaceholder.typicode.com/users",
-      albumsAPI: "https://jsonplaceholder.typicode.com/albums/",
-      photosAPI: this.albumsAPI + "/" + this.user + "/photos",
       user: 0,
-      album: 0,
-      photo: 0,
       favorites: [
         {
           name: "Benny",

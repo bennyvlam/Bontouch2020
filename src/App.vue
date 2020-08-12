@@ -1,7 +1,9 @@
 <template>
   <v-app>
     <v-content>
-      <router-view></router-view>
+      <keep-alive include="User">
+        <router-view></router-view>
+      </keep-alive>
     </v-content>
   </v-app>
 </template>
@@ -10,11 +12,10 @@
 export default {
   name: "App",
 
-  components: {
-  },
+  components: {},
 
   data: () => ({
     //
-  })
+  }),
 };
 </script>

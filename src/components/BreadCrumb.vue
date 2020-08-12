@@ -12,6 +12,15 @@
 export default {
   name: "BreadCrumb",
   props: ["currentRoute"],
+  computed: {
+    bread() {
+      if (this.currentRoute == "home") {
+        return "users";
+      } else {
+        return "nej";
+      }
+    },
+  },
   data: () => ({
     user: "Pelle Svanslös",
     albumName: "Orange birds",
@@ -24,12 +33,12 @@ export default {
       {
         text: "this.user",
         disabled: false,
-        href: "/User/",
+        href: "/user/",
       },
       {
         text: "this.albumName",
         disabled: false,
-        href: "/Album/",
+        href: "/album/",
       },
     ],
   }),
