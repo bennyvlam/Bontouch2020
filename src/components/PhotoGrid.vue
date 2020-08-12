@@ -4,8 +4,8 @@
     <v-container fluid>
       <v-row>
         <v-col cols="12">
-          <v-row class="mb-10" justify="space-around">
-            {{ items.length }} photos
+          <v-row justify="space-around">
+            <p class="font-italic">{{ items.length }} photos</p>
           </v-row>
           <v-row :justify="justify">
             <!-- <router-link :to="{ name: 'Album' }"> -->
@@ -22,6 +22,26 @@
               @click="goTo"
             > -->
             <!-- :to="'/album/' + user.name.split(' ').join('')" -->
+
+            <!-- <v-lazy
+              v-model="isActive"
+              :options="{
+                threshold: 0.5,
+              }"
+              min-height="200"
+              transition="fade-transition"
+            >
+              <v-img
+                v-for="(photo, index) in items"
+                :key="index"
+                class="ma-2 pa-3"
+                max-height="200px"
+                :src="photo.thumbnailUrl"
+                contain
+              >
+              </v-img>
+            </v-lazy> -->
+
             <v-img
               v-for="(photo, index) in items"
               :key="index"
@@ -29,8 +49,15 @@
               max-height="200px"
               :src="photo.thumbnailUrl"
               contain
-              
             >
+              <template v-slot:placeholder>
+                <v-row class="fill-height ma-0" align="center" justify="center">
+                  <v-progress-circular
+                    indeterminate
+                    color="grey lighten-5"
+                  ></v-progress-circular>
+                </v-row>
+              </template>
             </v-img>
             <!-- </v-card> -->
             <!-- </router-link> -->

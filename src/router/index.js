@@ -6,12 +6,12 @@ Vue.use(VueRouter);
 
 const routes = [
   {
-    path: "/",
+    path: "/users",
     name: "home",
     component: Home
   },
   {
-    path: "/user/:userId",
+    path: "/users/:userId",
     name: "user",
     props: true,
     // route level code-splitting
@@ -21,7 +21,7 @@ const routes = [
       import(/* webpackChunkName: "about" */ "../views/User/User.vue")
   },
   {
-    path: "/album/:albumId",
+    path: "/users/:userId/albums/:albumId",
     name: "album",
     props: true,
     // route level code-splitting

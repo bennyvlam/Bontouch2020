@@ -4,7 +4,6 @@
       class="ml-0 pl-3 py-2 grey lighten-5"
       :items="items"
     ></v-breadcrumbs>
-    <span>{{ currentRoute }}</span>
   </v-container>
 </template>
 
@@ -12,14 +11,24 @@
 export default {
   name: "BreadCrumb",
   props: ["currentRoute"],
-  computed: {
-    bread() {
-      if (this.currentRoute == "home") {
-        return "users";
-      } else {
-        return "nej";
+  mounted() {
+    var i;
+    if (this.currentRoute == "home") {
+      for (i = 0; i < this.items.length; i++) {
+        this.items[i].disabled = false;
       }
-    },
+      this.items[0].disabled = true;
+    } else if (this.currentRoute == "user") {
+      for (i = 0; i < this.items.length; i++) {
+        this.items[i].disabled = false;
+      }
+      this.items[1].disabled = true;
+    } else if (this.currentRoute == "album") {
+      for (i = 0; i < this.items.length; i++) {
+        this.items[i].disabled = false;
+      }
+      this.items[2].disabled = true;
+    }
   },
   data: () => ({
     user: "Pelle Svanslös",
@@ -27,20 +36,25 @@ export default {
     items: [
       {
         text: "Users",
-        disabled: true,
-        href: "/",
+        exact: true,
+        disabled: false,
+        to: "/users",
       },
       {
-        text: "this.user",
+        text: "a",
+        exact: true,
         disabled: false,
-        href: "/user/",
+        to: "/users/Benny",
       },
       {
         text: "this.albumName",
+        exact: true,
         disabled: false,
-        href: "/album/",
+        to: "/users/USERNAME/albums/0",
       },
     ],
+    userAPI: "https://jsonplaceholder.typicode.com/users?id=2",
+    albumsAPI: "https://jsonplaceholder.typicode.com/albums?id=2",
   }),
 };
 </script>

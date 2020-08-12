@@ -17,7 +17,7 @@
               tile
               min-width="260px"
               color="blue lighten-4"
-              :to="'/user/' + user.name.split(/[\s,\.]+/).join('')"
+              :to="'/users/' + user.name.split(/[\s,\.]+/).join('')"
             >
               <!-- @click="goTo(user.name, index)" -->
               <v-row class="ma-0 pa-0">
@@ -31,15 +31,15 @@
                   <v-card-actions>
                     <v-icon
                       small
-                      @click.prevent="favorite"
-                      v-if="!active"
+                      @click.prevent="favorite(index)"
+                      v-if="title != 'Favorites'"
                       color="blue-grey darken-2"
                     >
                       star_border
                     </v-icon>
                     <v-icon
                       small
-                      @click.prevent="favorite"
+                      @click.prevent="favorite(index)"
                       v-else
                       color="blue-grey darken-2"
                     >
@@ -83,8 +83,11 @@ export default {
     next() {
       alert("You clicked next!");
     },
-    favorite() {
-      this.active = !this.active;
+    favorite(index) {
+      this.$store.dispatch("updateUsersAndFavoritesList", {
+        userInfo: index,
+        amount: 5,
+      });
     },
   },
 };

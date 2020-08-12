@@ -9,9 +9,11 @@
             class="mb-4"
           ></BreadCrumb>
           <!-- Favorites -->
-          <UserGrid :title="titleFavorites" :items="favorites"></UserGrid>
+          <UserGrid :title="titleFavorites" :items="favoritesList"></UserGrid>
           <!-- Users -->
-          <UserGrid :title="titleUsers" :items="users"></UserGrid>
+          <UserGrid :title="titleUsers" :items="usersList"></UserGrid>
+          <v-btn @click="hej">AA</v-btn>
+          <!-- {{ count }} -->
         </v-col>
       </v-row>
     </v-container>
@@ -29,13 +31,31 @@ export default {
     BreadCrumb,
     UserGrid,
   },
+  created() {
+    this.myStorage = window.localStorage;
+  },
   mounted() {
-    this.axios
-      .get(this.usersAPI)
-      .then((response) => (this.users = response.data));
+    this.axios.get(this.usersAPI).then((response) => {
+      this.users = response.data;
+      this.$store.commit("saveUsers", { users: this.users });
+    });
+  },
+  computed: {
+    usersList() {
+      return this.$store.state.users;
+    },
+    favoritesList() {
+      return this.$store.state.favorites;
+    },
+  },
+  methods: {
+    hej() {
+      alert(this.$store.state.favorites);
+    },
   },
   data() {
     return {
+      myStorage: null,
       users: [],
       titleFavorites: "Favorites",
       titleUsers: "Users",

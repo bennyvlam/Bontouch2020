@@ -56,8 +56,7 @@ export default {
       photosAPI: this.albumsAPI + "/" + this.user + "/photos",
     };
   },
-  methods: {
-  },
+  methods: {},
 };
 </script>
 <style scoped></style>

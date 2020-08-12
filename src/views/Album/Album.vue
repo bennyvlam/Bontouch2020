@@ -11,11 +11,10 @@
           <v-row>
             <v-col cols="12">
               <v-row justify="center">
-                <v-title>{{ albumTitle.title }}</v-title>
+                <h1>{{ albumTitle.title }}</h1>
               </v-row>
             </v-col>
           </v-row>
-
           <PhotoGrid title="Album" :items="photos"></PhotoGrid>
         </v-col>
       </v-row>
@@ -41,11 +40,16 @@ export default {
     this.axios
       .get(this.albumsAPI)
       .then((response) => (this.albumTitle = response.data[0]));
+    this.axios
+      .get(this.userAPI)
+      .then((response) => (this.userName = response.data[0]));
   },
   data() {
     return {
       photos: [],
+      userName: "Hej",
       albumTitle: "lorem ipsum",
+      userAPI: "https://jsonplaceholder.typicode.com/users?id=2",
       albumsAPI: "https://jsonplaceholder.typicode.com/albums?id=2",
       photosAPI: "https://jsonplaceholder.typicode.com/photos?albumId=" + "2",
     };
