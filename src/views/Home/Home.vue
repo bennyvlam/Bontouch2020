@@ -61,7 +61,20 @@
 // @ is an alias to /src
 import BreadCrumb from "@/components/BreadCrumb.vue";
 import UserGrid from "@/components/UserGrid.vue";
+/*
+.DS_Store
+node_modules/
+/dist
+/public
 
+# Log files
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor settings
+.vscode
+*/
 export default {
   name: "Home",
   components: {
@@ -78,7 +91,7 @@ export default {
         this.$store.state.users === undefined ||
         this.$store.state.users.length == 0
       ) {
-        this.$store.commit("saveUsers", { users: this.users });
+        this.$store.dispatch("getUsersFromBackend", { users: this.users });
       }
     });
   },
@@ -90,18 +103,7 @@ export default {
       return this.$store.state.favorites;
     },
   },
-  methods: {
-    GetSortOrder(key) {
-      return function(a, b) {
-        if (a[key] > b[key]) {
-          return 1;
-        } else if (a[key] < b[key]) {
-          return -1;
-        }
-        return 0;
-      };
-    },
-  },
+  methods: {},
   data() {
     return {
       myStorage: null,

@@ -17,7 +17,6 @@ export default new Vuex.Store({
       state.userInfo = payload.user;
     },
     sortArray(state, sortKey) {
-      alert("HORNGE");
       const favorites = this.state.favorites;
       const users = this.state.users;
       favorites.sort((a, b) => {
@@ -54,10 +53,14 @@ export default new Vuex.Store({
   actions: {
     updateUsersAndFavoritesList: ({ commit }, payload) => {
       commit("updateFavorites", payload);
-      commit("sortArray", "id");
+      commit("sortArray", "name");
     },
     updateCurrentUser: ({ commit }, payload) => {
       commit("updateUserInfo", payload);
+    },
+    getUsersFromBackend: ({ commit }, payload) => {
+      commit("saveUsers", payload);
+      commit("sortArray", "name");
     },
   },
   getters: {
