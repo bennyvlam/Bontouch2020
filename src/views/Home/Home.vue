@@ -12,8 +12,45 @@
           <UserGrid :title="titleFavorites" :items="favoritesList"></UserGrid>
           <!-- Users -->
           <UserGrid :title="titleUsers" :items="usersList"></UserGrid>
-          <v-btn @click="hej">AA</v-btn>
-          <!-- {{ count }} -->
+          <!-- <v-btn @click="hej">AA</v-btn> -->
+          <v-row>
+            <v-col cols="6" sm="12" md="6">
+              <p>Favorites: {{ favoritesList.length }}</p>
+
+              <v-card
+                v-for="(user, index) in favoritesList"
+                :key="index"
+                class="ma-2 pa-3"
+                outlined
+                tile
+                min-width="260px"
+                color="blue lighten-4"
+                :to="'/users/' + user.name.split(/[\s,\.]+/).join('')"
+              >
+                <p>UserId: {{ user.id }}</p>
+                <p>Name: {{ user.name }}</p>
+              </v-card>
+            </v-col>
+            <v-col cols="6" sm="12" md="6">
+              <p>Users: {{ usersList.length }}</p>
+
+              <v-card
+                v-for="(user, index) in usersList"
+                :key="index"
+                class="ma-2 pa-3"
+                outlined
+                tile
+                min-width="260px"
+                color="blue lighten-4"
+                :to="'/users/' + user.name.split(/[\s,\.]+/).join('')"
+              >
+                <p>UserId: {{ user.id }}</p>
+                <p>Name: {{ user.name }}</p>
+              </v-card>
+            </v-col>
+          </v-row>
+
+          <!-- </router-link> -->
         </v-col>
       </v-row>
     </v-container>
@@ -37,7 +74,12 @@ export default {
   mounted() {
     this.axios.get(this.usersAPI).then((response) => {
       this.users = response.data;
-      this.$store.commit("saveUsers", { users: this.users });
+      if (
+        this.$store.state.users === undefined ||
+        this.$store.state.users.length == 0
+      ) {
+        this.$store.commit("saveUsers", { users: this.users });
+      }
     });
   },
   computed: {
@@ -49,8 +91,15 @@ export default {
     },
   },
   methods: {
-    hej() {
-      alert(this.$store.state.favorites);
+    GetSortOrder(key) {
+      return function(a, b) {
+        if (a[key] > b[key]) {
+          return 1;
+        } else if (a[key] < b[key]) {
+          return -1;
+        }
+        return 0;
+      };
     },
   },
   data() {

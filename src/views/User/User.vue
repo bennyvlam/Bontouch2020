@@ -11,7 +11,8 @@
           <v-row>
             <v-col cols="12">
               <v-row justify="center">
-                <v-title>userName</v-title>
+                <v-title>{{ currentUser }}</v-title>
+                <v-btn @click="printUser">aaa</v-btn>
               </v-row>
             </v-col>
           </v-row>
@@ -44,6 +45,8 @@ export default {
     BreadCrumb,
     AlbumGrid,
   },
+  computed: {
+  },
   mounted() {
     this.axios
       .get(this.albumsAPI)
@@ -54,9 +57,14 @@ export default {
       albums: [],
       albumsAPI: "https://jsonplaceholder.typicode.com/albums",
       photosAPI: this.albumsAPI + "/" + this.user + "/photos",
+      userInfo: {}
     };
   },
-  methods: {},
+  methods: {
+    printUser() {
+      alert(this.$state.userInfo.name);
+    }
+  },
 };
 </script>
 <style scoped></style>

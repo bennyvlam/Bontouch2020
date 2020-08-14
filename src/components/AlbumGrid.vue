@@ -40,14 +40,7 @@ export default {
       active: false,
     };
   },
-  methods: {
-    goTo() {
-      this.$router.push("album");
-    },
-    next() {
-      alert("You clicked next!");
-    },
-  },
+  methods: {},
 };
 </script>
 <style scoped>

@@ -8,7 +8,6 @@
       <v-row>
         <v-col cols="12">
           <v-row justify="space-between">
-            <!-- <router-link :to="{ name: 'Album' }"> -->
             <v-card
               v-for="(user, index) in items"
               :key="index"
@@ -17,9 +16,9 @@
               tile
               min-width="260px"
               color="blue lighten-4"
+              @click="goTo(user, index)"
               :to="'/users/' + user.name.split(/[\s,\.]+/).join('')"
             >
-              <!-- @click="goTo(user.name, index)" -->
               <v-row class="ma-0 pa-0">
                 <v-col class="ma-0 pa-0 mr-auto" cols="auto">
                   <v-card-title
@@ -31,7 +30,7 @@
                   <v-card-actions>
                     <v-icon
                       small
-                      @click.prevent="favorite(index)"
+                      @click.prevent="favorite(index, user.id)"
                       v-if="title != 'Favorites'"
                       color="blue-grey darken-2"
                     >
@@ -39,7 +38,7 @@
                     </v-icon>
                     <v-icon
                       small
-                      @click.prevent="favorite(index)"
+                      @click.prevent="favorite(index, user.id)"
                       v-else
                       color="blue-grey darken-2"
                     >
@@ -74,19 +73,17 @@ export default {
     };
   },
   methods: {
-    goTo(userName, index) {
-      this.$router.push({
-        name: "user",
-        params: { userId: userName.split(" ").join("") + index },
-      });
+    goTo(user, index) {
+      // this.$router.push({
+      //   name: "user",
+      //   params: { userId: user.userName.split(" ").join("") + index },
+      // });
+      this.$store.dispatch("updateCurrentUser", { user: user, index: index });
     },
-    next() {
-      alert("You clicked next!");
-    },
-    favorite(index) {
+    favorite(index, id) {
       this.$store.dispatch("updateUsersAndFavoritesList", {
-        userInfo: index,
-        amount: 5,
+        userIndex: index,
+        userId: id,
       });
     },
   },
