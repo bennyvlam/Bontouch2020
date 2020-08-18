@@ -109,7 +109,8 @@ export default {
         favorites: [],
         userInfo: null,
         userName: "",
-        albums: []
+        albums: [],
+        albumTitle: ""
       },
       titleFavorites: "Favorites",
       titleUsers: "Users",

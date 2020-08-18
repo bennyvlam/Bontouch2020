@@ -37,7 +37,7 @@
           <AlbumGrid
             title="Album"
             :items="
-              albums.filter(
+              persistedData.albums.filter(
                 (album) => album.userId == this.currentDisplayedUser.id
               )
             "
@@ -76,18 +76,21 @@ export default {
   },
   mounted() {
     this.axios.get(this.albumsAPI).then((response) => {
-      this.albums = response.data;
-      this.$store.dispatch("storeAlbums", { albums: this.albums });
+      this.persistedData.albums = response.data;
+      this.$store.dispatch("storeAlbums", {
+        albums: this.persistedData.albums,
+      });
     });
   },
   data() {
     return {
-      albums: [],
       persistedData: {
         users: [],
         favorites: [],
         userInfo: null,
+        userName: "",
         albums: [],
+        albumTitle: "",
       },
       albumsAPI: "https://jsonplaceholder.typicode.com/albums",
       photosAPI: this.albumsAPI + "/" + this.user + "/photos",

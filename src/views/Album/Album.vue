@@ -11,7 +11,7 @@
           <v-row>
             <v-col cols="12">
               <v-row justify="center">
-                <h1>{{ albumTitle.title }}</h1>
+                <h1>{{ albumTitle }}</h1>
               </v-row>
             </v-col>
           </v-row>
@@ -34,9 +34,22 @@ export default {
     PhotoGrid,
   },
   computed: {
+    albumTitle() {
+      return this.$store.getters.getAlbumTitle;
+    },
     currentDisplayedUser() {
       return this.$store.getters.getUser;
     },
+  },
+  created() {
+    const storedData = this.openStorage();
+    if (storedData) {
+      this.persistedData = {
+        ...this.persistedData,
+        ...storedData,
+      };
+      this.$store.dispatch("updateData", { data: this.persistedData });
+    }
   },
   mounted() {
     this.axios
@@ -47,16 +60,14 @@ export default {
             (photo) => photo.albumId == this.$route.params.albumId
           ))
       );
-    this.axios
-      .get(this.albumsAPI)
-      .then(
-        (response) =>
-          (this.albumTitle = response.data.filter(
-            (album) =>
-              album.userId == this.currentDisplayedUser.id &&
-              album.id == this.$route.params.albumId
-          )[0])
-      );
+    this.axios.get(this.albumsAPI).then((response) => {
+      this.persistedData.albumTitle = response.data.filter(
+        (album) =>
+          album.userId == this.currentDisplayedUser.id &&
+          album.id == this.$route.params.albumId
+      )[0].title;
+      this.$store.dispatch("updateData", { data: this.persistedData });
+    });
   },
   data() {
     return {
@@ -65,14 +76,20 @@ export default {
         users: [],
         favorites: [],
         userInfo: null,
+        userName: "",
+        albums: [],
+        albumTitle: "",
       },
-      albumTitle: "lorem ipsum",
       userAPI: "https://jsonplaceholder.typicode.com/users?id=2",
       albumsAPI: "https://jsonplaceholder.typicode.com/albums",
       photosAPI: "https://jsonplaceholder.typicode.com/photos",
     };
   },
-  methods: {},
+  methods: {
+    openStorage() {
+      return JSON.parse(localStorage.getItem("persistedData"));
+    },
+  },
 };
 </script>
 <style scoped></style>

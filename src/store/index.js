@@ -9,6 +9,7 @@ export default new Vuex.Store({
     users: [],
     favorites: [],
     albums: [],
+    albumTitle: "",
     persistedData: {},
     userInfo: null,
     userName: "",
@@ -24,6 +25,7 @@ export default new Vuex.Store({
       state.userInfo = payload.data.userInfo;
       state.userName = payload.data.userInfo.name.split(/[\s,\.]+/).join("");
       state.albums = payload.data.albums;
+      state.albumTitle = payload.data.albumTitle;
     },
     saveData(state) {
       state.persistedData["users"] = state.users;
@@ -31,6 +33,7 @@ export default new Vuex.Store({
       state.persistedData["userInfo"] = state.userInfo;
       state.persistedData["userName"] = state.userName;
       state.persistedData["albums"] = state.albums;
+      state.persistedData["albumTitle"] = state.albumTitle;
 
       let storedData = JSON.parse(localStorage.getItem("persistedData"));
       if (!storedData) storedData = {};
@@ -40,6 +43,7 @@ export default new Vuex.Store({
       storedData["userInfo"] = state.userInfo;
       storedData["userName"] = state.userName;
       storedData["albums"] = state.albums;
+      storedData["albumTitle"] = state.albumTitle;
       localStorage.setItem("persistedData", JSON.stringify(storedData));
     },
     updateUserInfo(state, payload) {
@@ -126,6 +130,9 @@ export default new Vuex.Store({
     },
     getAlbums: (state) => {
       return state.albums;
+    },
+    getAlbumTitle: (state) => {
+      return state.albumTitle;
     },
   },
 });
