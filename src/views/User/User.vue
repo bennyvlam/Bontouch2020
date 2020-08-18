@@ -11,19 +11,26 @@
           <v-row>
             <v-col cols="12">
               <v-row justify="center">
-                <v-title>{{ currentUser }}</v-title>
-                <v-btn @click="printUser">aaa</v-btn>
+                <h1>{{ currentDisplayedUser.name }}</h1>
               </v-row>
             </v-col>
           </v-row>
           <v-row class="mb-10">
             <v-col cols="12">
               <v-row class="mx-10" justify="space-around">
-                <span>Bontouch AB</span>
+                <span>{{ currentDisplayedUser.company.name }}</span>
                 <span class="gray--text text--lighten-4">–</span>
-                <span>benny.lam@bontouch.com</span>
+                <span>{{ currentDisplayedUser.email }}</span>
                 <span class="gray--text">–</span>
-                <span>Runda Vägen 30B, 16751 Bromma</span>
+                <span
+                  >{{
+                    currentDisplayedUser.address.street +
+                      ", " +
+                      +currentDisplayedUser.address.zipcode +
+                      " " +
+                      currentDisplayedUser.address.city
+                  }}
+                </span>
               </v-row>
             </v-col>
           </v-row>
@@ -45,7 +52,20 @@ export default {
     BreadCrumb,
     AlbumGrid,
   },
+  created() {
+    const storedData = this.openStorage();
+    if (storedData) {
+      this.persistedData = {
+        ...this.persistedData,
+        ...storedData,
+      };
+      this.$store.dispatch("updateData", { data: this.persistedData });
+    }
+  },
   computed: {
+    currentDisplayedUser() {
+      return this.$store.getters.getUser;
+    },
   },
   mounted() {
     this.axios
@@ -55,15 +75,20 @@ export default {
   data() {
     return {
       albums: [],
+      persistedData: {
+        users: [],
+        favorites: [],
+        userInfo: null,
+      },
       albumsAPI: "https://jsonplaceholder.typicode.com/albums",
       photosAPI: this.albumsAPI + "/" + this.user + "/photos",
-      userInfo: {}
+      userInfo: {},
     };
   },
   methods: {
-    printUser() {
-      alert(this.$state.userInfo.name);
-    }
+    openStorage() {
+      return JSON.parse(localStorage.getItem("persistedData"));
+    },
   },
 };
 </script>

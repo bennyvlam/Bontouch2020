@@ -1,17 +1,39 @@
 import Vue from "vue";
-import Vuex from "vuex";
+import Vuex, { Store } from "vuex";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    breadcrumbs: [],
     users: [],
     favorites: [],
+    persistedData: {},
     userInfo: null,
+    initialized: false,
+    usersAPI: "https://jsonplaceholder.typicode.com/users",
   },
   mutations: {
     saveUsers(state, payload) {
-      state.users = payload.users;
+      if (!state.initialized) state.users = payload.users;
+    },
+    update(state, payload) {
+      state.users = payload.data.users;
+      state.favorites = payload.data.favorites;
+      state.userInfo = payload.data.userInfo;
+    },
+    saveData(state) {
+      state.persistedData["users"] = state.users;
+      state.persistedData["favorites"] = state.favorites;
+      state.persistedData["userInfo"] = state.userInfo;
+
+      let storedData = JSON.parse(localStorage.getItem("persistedData"));
+      if (!storedData) storedData = {};
+
+      storedData["users"] = state.users;
+      storedData["favorites"] = state.favorites;
+      storedData["userInfo"] = state.userInfo;
+      localStorage.setItem("persistedData", JSON.stringify(storedData));
     },
     updateUserInfo(state, payload) {
       state.userInfo = payload.user;
@@ -62,6 +84,12 @@ export default new Vuex.Store({
       commit("saveUsers", payload);
       commit("sortArray", "name");
     },
+    storeData: ({ commit }) => {
+      commit("saveData");
+    },
+    updateData: ({ commit }, payload) => {
+      commit("update", payload);
+    },
   },
   getters: {
     getUsers: (state) => {
@@ -70,5 +98,15 @@ export default new Vuex.Store({
     getFavorites: (state) => {
       return state.favorites;
     },
+    getData: (state) => {
+      var data = {
+        users: state.users,
+        favorites: state.favorites,
+      };
+      return data;
+    },
+    getUser: (state) => {
+      return state.userInfo;
+    }
   },
 });

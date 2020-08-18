@@ -16,7 +16,7 @@
               tile
               min-width="260px"
               color="blue lighten-4"
-              @click="goTo(user, index)"
+              @click.native="goTo(user, index)"
               :to="'/users/' + user.name.split(/[\s,\.]+/).join('')"
             >
               <v-row class="ma-0 pa-0">
@@ -79,12 +79,14 @@ export default {
       //   params: { userId: user.userName.split(" ").join("") + index },
       // });
       this.$store.dispatch("updateCurrentUser", { user: user, index: index });
+      this.$store.dispatch("storeData");
     },
     favorite(index, id) {
       this.$store.dispatch("updateUsersAndFavoritesList", {
         userIndex: index,
         userId: id,
       });
+      this.$store.dispatch("storeData");
     },
   },
 };
