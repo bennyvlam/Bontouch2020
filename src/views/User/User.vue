@@ -26,7 +26,7 @@
                   >{{
                     currentDisplayedUser.address.street +
                       ", " +
-                      +currentDisplayedUser.address.zipcode +
+                      currentDisplayedUser.address.zipcode +
                       " " +
                       currentDisplayedUser.address.city
                   }}
@@ -59,6 +59,11 @@ export default {
     BreadCrumb,
     AlbumGrid,
   },
+  computed: {
+    currentDisplayedUser() {
+      return this.$store.getters.getUser;
+    },
+  },
   created() {
     const storedData = this.openStorage();
     if (storedData) {
@@ -66,35 +71,26 @@ export default {
         ...this.persistedData,
         ...storedData,
       };
-      this.$store.dispatch("updateData", { data: this.persistedData });
+      this.$store.dispatch("setStateData", { data: this.persistedData });
     }
-  },
-  computed: {
-    currentDisplayedUser() {
-      return this.$store.getters.getUser;
-    },
   },
   mounted() {
     this.axios.get(this.albumsAPI).then((response) => {
       this.persistedData.albums = response.data;
-      this.$store.dispatch("storeAlbums", {
-        albums: this.persistedData.albums,
-      });
+      this.$store.dispatch("setStateData", { data: this.persistedData });
     });
   },
   data() {
     return {
+      albumsAPI: "https://jsonplaceholder.typicode.com/albums",
       persistedData: {
-        users: [],
-        favorites: [],
-        userInfo: null,
-        userName: "",
         albums: [],
         albumTitle: "",
+        favorites: [],
+        users: [],
+        userInfo: null,
+        userName: "",
       },
-      albumsAPI: "https://jsonplaceholder.typicode.com/albums",
-      photosAPI: this.albumsAPI + "/" + this.user + "/photos",
-      userInfo: {},
     };
   },
   methods: {

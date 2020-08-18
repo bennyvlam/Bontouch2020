@@ -74,19 +74,15 @@ export default {
   },
   methods: {
     goTo(user, index) {
-      // this.$router.push({
-      //   name: "user",
-      //   params: { userId: user.userName.split(" ").join("") + index },
-      // });
-      this.$store.dispatch("updateCurrentUser", { user: user, index: index });
-      this.$store.dispatch("storeData");
+      this.$store.dispatch("setCurrentUser", { user: user, index: index });
+      this.$store.dispatch("setPersistedData");
     },
     favorite(index, id) {
-      this.$store.dispatch("updateUsersAndFavoritesList", {
+      this.$store.dispatch("setUsersAndFavorites", {
         userIndex: index,
         userId: id,
       });
-      this.$store.dispatch("storeData");
+      this.$store.dispatch("setPersistedData");
     },
   },
 };

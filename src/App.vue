@@ -1,10 +1,10 @@
 <template>
   <v-app>
-    <v-content>
+    <v-main>
       <keep-alive include="User">
         <router-view></router-view>
       </keep-alive>
-    </v-content>
+    </v-main>
   </v-app>
 </template>
 

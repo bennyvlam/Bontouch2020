@@ -12,42 +12,6 @@
           <UserGrid :title="titleFavorites" :items="favoritesList"></UserGrid>
           <!-- Users -->
           <UserGrid :title="titleUsers" :items="usersList"></UserGrid>
-          <v-row>
-            <v-col cols="6" sm="12" md="6">
-              <p>Favorites: {{ favoritesList.length }}</p>
-
-              <v-card
-                v-for="(user, index) in favoritesList"
-                :key="index"
-                class="ma-2 pa-3"
-                outlined
-                tile
-                min-width="260px"
-                color="blue lighten-4"
-                :to="'/users/' + user.name.split(/[\s,\.]+/).join('')"
-              >
-                <p>UserId: {{ user.id }}</p>
-                <p>Name: {{ user.name }}</p>
-              </v-card>
-            </v-col>
-            <v-col cols="6" sm="12" md="6">
-              <p>Users: {{ usersList.length }}</p>
-
-              <v-card
-                v-for="(user, index) in usersList"
-                :key="index"
-                class="ma-2 pa-3"
-                outlined
-                tile
-                min-width="260px"
-                color="blue lighten-4"
-                :to="'/users/' + user.name.split(/[\s,\.]+/).join('')"
-              >
-                <p>UserId: {{ user.id }}</p>
-                <p>Name: {{ user.name }}</p>
-              </v-card>
-            </v-col>
-          </v-row>
         </v-col>
       </v-row>
     </v-container>
@@ -72,7 +36,7 @@ export default {
         ...this.persistedData,
         ...storedData,
       };
-      this.$store.dispatch("updateData", { data: this.persistedData });
+      this.$store.dispatch("setStateData", { data: this.persistedData });
     }
   },
   mounted() {
@@ -82,9 +46,10 @@ export default {
         this.$store.state.users === undefined ||
         this.$store.state.users.length == 0
       ) {
-        this.$store.dispatch("getUsersFromBackend", {
-          users: this.persistedData.users
+        this.$store.commit("FETCH_USERS", {
+          users: this.persistedData.users,
         });
+        this.$store.commit("sortArray", "name");
       }
     });
   },
@@ -105,12 +70,12 @@ export default {
     return {
       myStorage: null,
       persistedData: {
-        users: [],
+        albums: [],
+        albumTitle: "",
         favorites: [],
+        users: [],
         userInfo: null,
         userName: "",
-        albums: [],
-        albumTitle: ""
       },
       titleFavorites: "Favorites",
       titleUsers: "Users",

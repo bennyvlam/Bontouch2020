@@ -2,7 +2,7 @@
   <v-container>
     <v-breadcrumbs
       class="ml-0 pl-3 py-2 grey lighten-5"
-      :items="items"
+      :items="breadCrumbs"
     ></v-breadcrumbs>
   </v-container>
 </template>
@@ -11,6 +11,11 @@
 export default {
   name: "BreadCrumb",
   props: ["currentRoute"],
+  computed: {
+    breadCrumbs() {
+      return this.$store.getters.getBreadCrumbs;
+    }
+  },
   mounted() {
     var i;
     if (this.currentRoute == "home") {

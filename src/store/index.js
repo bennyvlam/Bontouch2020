@@ -5,29 +5,20 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
-    breadcrumbs: [],
-    users: [],
-    favorites: [],
     albums: [],
     albumTitle: "",
+    breadCrumbs: [],
+    favorites: [],
     persistedData: {},
+    users: [],
     userInfo: null,
     userName: "",
-    initialized: false,
   },
   mutations: {
-    saveUsers(state, payload) {
-      if (!state.initialized) state.users = payload.users;
+    FETCH_USERS(state, payload) {
+      state.users = payload.users;
     },
-    update(state, payload) {
-      state.users = payload.data.users;
-      state.favorites = payload.data.favorites;
-      state.userInfo = payload.data.userInfo;
-      state.userName = payload.data.userInfo.name.split(/[\s,\.]+/).join("");
-      state.albums = payload.data.albums;
-      state.albumTitle = payload.data.albumTitle;
-    },
-    saveData(state) {
+    SET_PERSISTED_DATA(state) {
       state.persistedData["users"] = state.users;
       state.persistedData["favorites"] = state.favorites;
       state.persistedData["userInfo"] = state.userInfo;
@@ -46,13 +37,27 @@ export default new Vuex.Store({
       storedData["albumTitle"] = state.albumTitle;
       localStorage.setItem("persistedData", JSON.stringify(storedData));
     },
-    updateUserInfo(state, payload) {
+    SET_STATE_DATA(state, payload) {
+      state.users = payload.data.users;
+      state.favorites = payload.data.favorites;
+      state.userInfo = payload.data.userInfo;
+      state.userName = payload.data.userInfo.name.split(/[\s,\.]+/).join("");
+      state.albums = payload.data.albums;
+      state.albumTitle = payload.data.albumTitle;
+    },
+    SET_USERS_AND_FAVORITES(state, payload) {
+      if (state.users.some((user) => user.id === payload.userId)) {
+        state.favorites.push(state.users[payload.userIndex]);
+        state.users.splice(payload.userIndex, 1);
+      } else if (state.favorites.some((user) => user.id === payload.userId)) {
+        state.users.push(state.favorites[payload.userIndex]);
+        state.favorites.splice(payload.userIndex, 1);
+      }
+    },
+    SET_USER_INFO(state, payload) {
       state.userInfo = payload.user;
     },
-    saveAlbums(state, payload) {
-      state.albums = payload.albums;
-    },
-    sortArray(state, sortKey) {
+    SORT_ARRAY(state, sortKey) {
       const favorites = this.state.favorites;
       const users = this.state.users;
       favorites.sort((a, b) => {
@@ -76,44 +81,34 @@ export default new Vuex.Store({
       state.favorites = favorites;
       state.users = users;
     },
-    updateFavorites(state, payload) {
-      if (state.users.some((user) => user.id === payload.userId)) {
-        state.favorites.push(state.users[payload.userIndex]);
-        state.users.splice(payload.userIndex, 1);
-      } else if (state.favorites.some((user) => user.id === payload.userId)) {
-        state.users.push(state.favorites[payload.userIndex]);
-        state.favorites.splice(payload.userIndex, 1);
-      }
-    },
   },
   actions: {
-    updateUsersAndFavoritesList: ({ commit }, payload) => {
-      commit("updateFavorites", payload);
-      commit("sortArray", "name");
+    setBreadCrumbs: ({ commit }, payload) => {
+      commit("SET_BREAD_CRUMBS", payload);
     },
-    updateCurrentUser: ({ commit }, payload) => {
-      commit("updateUserInfo", payload);
+    setCurrentUser: ({ commit }, payload) => {
+      commit("SET_USER_INFO", payload);
     },
-    getUsersFromBackend: ({ commit }, payload) => {
-      commit("saveUsers", payload);
-      commit("sortArray", "name");
+    setPersistedData: ({ commit }) => {
+      commit("SET_PERSISTED_DATA");
     },
-    storeData: ({ commit }) => {
-      commit("saveData");
+    setStateData: ({ commit }, payload) => {
+      commit("SET_STATE_DATA", payload);
     },
-    updateData: ({ commit }, payload) => {
-      commit("update", payload);
-    },
-    storeAlbums: ({ commit }, payload) => {
-      commit("saveAlbums", payload);
+    setUsersAndFavorites: ({ commit }, payload) => {
+      commit("SET_USERS_AND_FAVORITES", payload);
+      commit("SORT_ARRAY", "name");
     },
   },
   getters: {
-    getUsers: (state) => {
-      return state.users;
+    getAlbums: (state) => {
+      return state.albums;
     },
-    getFavorites: (state) => {
-      return state.favorites;
+    getAlbumTitle: (state) => {
+      return state.albumTitle;
+    },
+    getBreadCrumbs: (state) => {
+      return state.breadCrumbs;
     },
     getData: (state) => {
       var data = {
@@ -122,17 +117,17 @@ export default new Vuex.Store({
       };
       return data;
     },
+    getFavorites: (state) => {
+      return state.favorites;
+    },
     getUser: (state) => {
       return state.userInfo;
     },
+    getUsers: (state) => {
+      return state.users;
+    },
     getUserName: (state) => {
       return state.userName;
-    },
-    getAlbums: (state) => {
-      return state.albums;
-    },
-    getAlbumTitle: (state) => {
-      return state.albumTitle;
     },
   },
 });

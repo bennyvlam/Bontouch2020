@@ -48,7 +48,7 @@ export default {
         ...this.persistedData,
         ...storedData,
       };
-      this.$store.dispatch("updateData", { data: this.persistedData });
+      this.$store.dispatch("setStateData", { data: this.persistedData });
     }
   },
   mounted() {
@@ -61,26 +61,26 @@ export default {
           ))
       );
     this.axios.get(this.albumsAPI).then((response) => {
+      this.persistedData.albums = response.data;
       this.persistedData.albumTitle = response.data.filter(
         (album) =>
           album.userId == this.currentDisplayedUser.id &&
           album.id == this.$route.params.albumId
       )[0].title;
-      this.$store.dispatch("updateData", { data: this.persistedData });
+      this.$store.dispatch("setStateData", { data: this.persistedData });
     });
   },
   data() {
     return {
       photos: [],
       persistedData: {
-        users: [],
-        favorites: [],
-        userInfo: null,
-        userName: "",
         albums: [],
         albumTitle: "",
+        favorites: [],
+        users: [],
+        userInfo: null,
+        userName: "",
       },
-      userAPI: "https://jsonplaceholder.typicode.com/users?id=2",
       albumsAPI: "https://jsonplaceholder.typicode.com/albums",
       photosAPI: "https://jsonplaceholder.typicode.com/photos",
     };
