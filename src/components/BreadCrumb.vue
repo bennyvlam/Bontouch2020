@@ -31,8 +31,6 @@ export default {
     }
   },
   data: () => ({
-    user: "Pelle Svanslös",
-    albumName: "Orange birds",
     items: [
       {
         text: "Users",
@@ -53,8 +51,6 @@ export default {
         to: "/users/USERNAME/albums/0",
       },
     ],
-    userAPI: "https://jsonplaceholder.typicode.com/users?id=2",
-    albumsAPI: "https://jsonplaceholder.typicode.com/albums?id=2",
   }),
 };
 </script>

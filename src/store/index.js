@@ -8,10 +8,11 @@ export default new Vuex.Store({
     breadcrumbs: [],
     users: [],
     favorites: [],
+    albums: [],
     persistedData: {},
     userInfo: null,
+    userName: "",
     initialized: false,
-    usersAPI: "https://jsonplaceholder.typicode.com/users",
   },
   mutations: {
     saveUsers(state, payload) {
@@ -21,11 +22,15 @@ export default new Vuex.Store({
       state.users = payload.data.users;
       state.favorites = payload.data.favorites;
       state.userInfo = payload.data.userInfo;
+      state.userName = payload.data.userInfo.name.split(/[\s,\.]+/).join("");
+      state.albums = payload.data.albums;
     },
     saveData(state) {
       state.persistedData["users"] = state.users;
       state.persistedData["favorites"] = state.favorites;
       state.persistedData["userInfo"] = state.userInfo;
+      state.persistedData["userName"] = state.userName;
+      state.persistedData["albums"] = state.albums;
 
       let storedData = JSON.parse(localStorage.getItem("persistedData"));
       if (!storedData) storedData = {};
@@ -33,10 +38,15 @@ export default new Vuex.Store({
       storedData["users"] = state.users;
       storedData["favorites"] = state.favorites;
       storedData["userInfo"] = state.userInfo;
+      storedData["userName"] = state.userName;
+      storedData["albums"] = state.albums;
       localStorage.setItem("persistedData", JSON.stringify(storedData));
     },
     updateUserInfo(state, payload) {
       state.userInfo = payload.user;
+    },
+    saveAlbums(state, payload) {
+      state.albums = payload.albums;
     },
     sortArray(state, sortKey) {
       const favorites = this.state.favorites;
@@ -90,6 +100,9 @@ export default new Vuex.Store({
     updateData: ({ commit }, payload) => {
       commit("update", payload);
     },
+    storeAlbums: ({ commit }, payload) => {
+      commit("saveAlbums", payload);
+    },
   },
   getters: {
     getUsers: (state) => {
@@ -107,6 +120,12 @@ export default new Vuex.Store({
     },
     getUser: (state) => {
       return state.userInfo;
-    }
+    },
+    getUserName: (state) => {
+      return state.userName;
+    },
+    getAlbums: (state) => {
+      return state.albums;
+    },
   },
 });

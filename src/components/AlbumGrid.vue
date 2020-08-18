@@ -17,9 +17,11 @@
             min-width="260px"
             max-width="260px"
             color="blue lighten-4"
-            :to="'USERNAME/albums/' + index"
+            :to="{
+              name: 'album',
+              params: { userId: userName, albumId: album.id },
+            }"
           >
-            <!-- :to="'/album/' + user.name.split(' ').join('')" -->
             <v-card-text class="mb-0 pa-0 blue-grey--text text--darken-2">{{
               album.title
             }}</v-card-text>
@@ -35,6 +37,11 @@
 export default {
   name: "AlbumGrid",
   props: ["title", "items"],
+  computed: {
+    userName() {
+      return this.$store.getters.getUserName;
+    },
+  },
   data() {
     return {
       active: false,

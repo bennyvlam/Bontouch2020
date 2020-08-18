@@ -33,25 +33,43 @@ export default {
     BreadCrumb,
     PhotoGrid,
   },
+  computed: {
+    currentDisplayedUser() {
+      return this.$store.getters.getUser;
+    },
+  },
   mounted() {
     this.axios
       .get(this.photosAPI)
-      .then((response) => (this.photos = response.data));
+      .then(
+        (response) =>
+          (this.photos = response.data.filter(
+            (photo) => photo.albumId == this.$route.params.albumId
+          ))
+      );
     this.axios
       .get(this.albumsAPI)
-      .then((response) => (this.albumTitle = response.data[0]));
-    this.axios
-      .get(this.userAPI)
-      .then((response) => (this.userName = response.data[0]));
+      .then(
+        (response) =>
+          (this.albumTitle = response.data.filter(
+            (album) =>
+              album.userId == this.currentDisplayedUser.id &&
+              album.id == this.$route.params.albumId
+          )[0])
+      );
   },
   data() {
     return {
       photos: [],
-      userName: "Hej",
+      persistedData: {
+        users: [],
+        favorites: [],
+        userInfo: null,
+      },
       albumTitle: "lorem ipsum",
       userAPI: "https://jsonplaceholder.typicode.com/users?id=2",
-      albumsAPI: "https://jsonplaceholder.typicode.com/albums?id=2",
-      photosAPI: "https://jsonplaceholder.typicode.com/photos?albumId=" + "2",
+      albumsAPI: "https://jsonplaceholder.typicode.com/albums",
+      photosAPI: "https://jsonplaceholder.typicode.com/photos",
     };
   },
   methods: {},

@@ -34,7 +34,14 @@
               </v-row>
             </v-col>
           </v-row>
-          <AlbumGrid title="Album" :items="albums"></AlbumGrid>
+          <AlbumGrid
+            title="Album"
+            :items="
+              albums.filter(
+                (album) => album.userId == this.currentDisplayedUser.id
+              )
+            "
+          ></AlbumGrid>
         </v-col>
       </v-row>
     </v-container>
@@ -68,9 +75,10 @@ export default {
     },
   },
   mounted() {
-    this.axios
-      .get(this.albumsAPI)
-      .then((response) => (this.albums = response.data));
+    this.axios.get(this.albumsAPI).then((response) => {
+      this.albums = response.data;
+      this.$store.dispatch("storeAlbums", { albums: this.albums });
+    });
   },
   data() {
     return {
@@ -79,6 +87,7 @@ export default {
         users: [],
         favorites: [],
         userInfo: null,
+        albums: [],
       },
       albumsAPI: "https://jsonplaceholder.typicode.com/albums",
       photosAPI: this.albumsAPI + "/" + this.user + "/photos",

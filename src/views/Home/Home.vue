@@ -107,7 +107,9 @@ export default {
       persistedData: {
         users: [],
         favorites: [],
-        userInfo: null
+        userInfo: null,
+        userName: "",
+        albums: []
       },
       titleFavorites: "Favorites",
       titleUsers: "Users",
