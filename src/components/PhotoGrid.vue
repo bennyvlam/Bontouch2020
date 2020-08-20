@@ -4,63 +4,54 @@
     <v-container fluid>
       <v-row>
         <v-col cols="12">
-          <v-row justify="space-around">
+          <v-row justify="space-around" class="mb-10">
             <p class="font-italic">{{ items.length }} photos</p>
           </v-row>
           <v-row :justify="justify">
-            <!-- <router-link :to="{ name: 'Album' }"> -->
-            <!-- <v-card
+            <v-card
               v-for="(photo, index) in items"
               :key="index"
-              class="ma-2 pa-3"
               outlined
               tile
+              class="ma-2 pa-3"
               min-width="200px"
               max-width="200px"
               min-height="200px"
               max-height="200px"
-              @click="goTo"
-            > -->
-            <!-- :to="'/album/' + user.name.split(' ').join('')" -->
-
-            <!-- <v-lazy
-              v-model="isActive"
-              :options="{
-                threshold: 0.5,
-              }"
-              min-height="200"
-              transition="fade-transition"
+              @click="openPhoto(index)"
+              :img="photo.thumbnailUrl"
             >
-              <v-img
-                v-for="(photo, index) in items"
-                :key="index"
-                class="ma-2 pa-3"
-                max-height="200px"
-                :src="photo.thumbnailUrl"
-                contain
-              >
-              </v-img>
-            </v-lazy> -->
-
-            <v-img
-              v-for="(photo, index) in items"
-              :key="index"
-              class="ma-2 pa-3"
-              max-height="200px"
-              :src="photo.thumbnailUrl"
-              contain
-            >
-              <template v-slot:placeholder>
-                <v-row class="fill-height ma-0" align="center" justify="center">
-                  <v-progress-circular
-                    indeterminate
-                    color="grey lighten-5"
-                  ></v-progress-circular>
-                </v-row>
-              </template>
-            </v-img>
-            <!-- </v-card> -->
-            <!-- </router-link> -->
+            </v-card>
+          </v-row>
+          <v-row>
+            <div v-if="isViewing" class="photoPreview">
+              <v-icon class="close" @click.prevent="closePhoto()">cross</v-icon>
+              <div class="photoPreview-content">
+                <img
+                  :src="displayedPhoto"
+                  style="width:100%"
+                  @click.prevent="alert('hej')"
+                  class="mb-5"
+                />
+                <!-- Next/previous controls -->
+                <v-icon
+                  large
+                  class="prev py-2"
+                  @click.prevent="openPhoto(photoIndex - 1)"
+                  >keyboard_arrow_left</v-icon
+                >
+                <v-icon
+                  large
+                  class="next py-2"
+                  @click.prevent="openPhoto(photoIndex + 1)"
+                  >keyboard_arrow_right</v-icon
+                >
+                <!-- Caption text -->
+                <p class="white--text text-center">
+                  {{ photos[photoIndex].title }}
+                </p>
+              </div>
+            </div>
           </v-row>
         </v-col>
       </v-row>
@@ -71,7 +62,27 @@
 <script>
 export default {
   name: "PhotoGrid",
-  props: ["title", "items"],
+  props: ["title", "items", "isViewing"],
+  computed: {
+    photos() {
+      return this.$store.getters.getPhotos;
+    },
+    displayedPhoto() {
+      return this.photos[this.photoIndex].url;
+    },
+  },
+  created() {
+    const storedData = this.openStorage();
+    if (storedData) {
+      this.persistedData = {
+        ...this.persistedData,
+        ...storedData,
+      };
+      this.$store.dispatch("setStateData", { data: this.persistedData });
+      this.$store.dispatch("setPersistedData");
+      this.photoIndex = this.persistedData.photoIndex;
+    }
+  },
   mounted() {
     if (this.items.length % 4 != 0) {
       this.justify = "start";
@@ -79,77 +90,46 @@ export default {
   },
   data() {
     return {
+      photo: "",
+      photoIndex: 0,
       active: false,
       justify: "space-between",
-      items2: [
-        {
-          albumId: 1,
-          id: 1,
-          title: "accusamus beatae ad facilis cum similique qui sunt",
-          url: "https://via.placeholder.com/600/92c952",
-          thumbnailUrl: "https://via.placeholder.com/150/92c952",
-        },
-        {
-          albumId: 1,
-          id: 2,
-          title: "reprehenderit est deserunt velit ipsam",
-          url: "https://via.placeholder.com/600/771796",
-          thumbnailUrl: "https://via.placeholder.com/150/771796",
-        },
-        {
-          albumId: 1,
-          id: 3,
-          title: "officia porro iure quia iusto qui ipsa ut modi",
-          url: "https://via.placeholder.com/600/24f355",
-          thumbnailUrl: "https://via.placeholder.com/150/24f355",
-        },
-        {
-          albumId: 1,
-          id: 4,
-          title: "culpa odio esse rerum omnis laboriosam voluptate repudiandae",
-          url: "https://via.placeholder.com/600/d32776",
-          thumbnailUrl: "https://via.placeholder.com/150/d32776",
-        },
-        {
-          albumId: 1,
-          id: 5,
-          title: "natus nisi omnis corporis facere molestiae rerum in",
-          url: "https://via.placeholder.com/600/f66b97",
-          thumbnailUrl: "https://via.placeholder.com/150/f66b97",
-        },
-        {
-          albumId: 1,
-          id: 6,
-          title: "accusamus ea aliquid et amet sequi nemo",
-          url: "https://via.placeholder.com/600/56a8c2",
-          thumbnailUrl: "https://via.placeholder.com/150/56a8c2",
-        },
-        {
-          albumId: 1,
-          id: 7,
-          title:
-            "officia delectus consequatur vero aut veniam explicabo molestias",
-          url: "https://via.placeholder.com/600/b0f7cc",
-          thumbnailUrl: "https://via.placeholder.com/150/b0f7cc",
-        },
-        {
-          albumId: 1,
-          id: 8,
-          title: "aut porro officiis laborum odit ea laudantium corporis",
-          url: "https://via.placeholder.com/600/54176f",
-          thumbnailUrl: "https://via.placeholder.com/150/54176f",
-        },
-        {
-          albumId: 1,
-          id: 9,
-          title: "qui eius qui autem sed",
-          url: "https://via.placeholder.com/600/51aa97",
-          thumbnailUrl: "https://via.placeholder.com/150/51aa97",
-        },
-      ],
+      slideIndex: 0,
+      persistedData: {
+        albums: [],
+        albumTitle: "",
+        favorites: [],
+        photos: [],
+        users: [],
+        userInfo: null,
+        userName: "",
+        isViewing: false,
+        photoIndex: 0,
+      },
     };
   },
-  methods: {},
+  methods: {
+    // Open the photoPreview
+    openPhoto(index) {
+      this.$store.dispatch("setView", { isViewing: true });
+      if (index < 0) index = 0;
+      if (index > this.items.length - 1) index = this.items.length - 1;
+      this.photoIndex = index;
+      this.$store.dispatch("setDisplayedPhoto", {
+        photos: this.items,
+        photoIndex: index,
+      });
+      this.$store.dispatch("setPersistedData");
+    },
+    // Close the photoPreview
+    closePhoto() {
+      this.$store.dispatch("setView", { isViewing: false });
+      this.$store.dispatch("setPersistedData");
+    },
+    openStorage() {
+      return JSON.parse(localStorage.getItem("persistedData"));
+    },
+  },
 };
 </script>
 <style scoped>
@@ -166,5 +146,61 @@ h2 {
 .photo {
   width: 60px;
   height: 60px;
+}
+
+.photoPreview {
+  position: fixed;
+  padding-top: 100px;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.75);
+}
+
+.photoPreview-content {
+  position: relative;
+  margin: auto;
+  width: 100%;
+  max-width: 500px;
+}
+
+.close {
+  color: white;
+  position: absolute;
+  top: 2%;
+  right: 5%;
+}
+
+.close:hover,
+.close:focus {
+  color: #999;
+  cursor: pointer;
+}
+
+.prev,
+.next {
+  cursor: pointer;
+  position: absolute;
+  top: 40%;
+  color: white;
+  font-weight: bold;
+  transition: 0.6s ease;
+}
+
+.next {
+  right: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+.prev {
+  left: 0;
+  border-radius: 3px 0 0 3px;
+}
+
+.prev:hover,
+.next:hover {
+  background-color: rgba(0, 0, 0, 0.8);
 }
 </style>

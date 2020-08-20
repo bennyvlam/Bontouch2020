@@ -15,7 +15,12 @@
               </v-row>
             </v-col>
           </v-row>
-          <PhotoGrid title="Album" :items="photos"></PhotoGrid>
+          <PhotoGrid
+            title="Album"
+            :items="persistedData.photos"
+            :isViewing="isViewing"
+            :photoIndex="persistedData.photoIndex"
+          ></PhotoGrid>
         </v-col>
       </v-row>
     </v-container>
@@ -40,6 +45,9 @@ export default {
     currentDisplayedUser() {
       return this.$store.getters.getUser;
     },
+    isViewing() {
+      return this.$store.getters.getViewState;
+    },
   },
   created() {
     const storedData = this.openStorage();
@@ -49,6 +57,7 @@ export default {
         ...storedData,
       };
       this.$store.dispatch("setStateData", { data: this.persistedData });
+      this.$store.dispatch("setPersistedData");
     }
   },
   mounted() {
@@ -56,7 +65,7 @@ export default {
       .get(this.photosAPI)
       .then(
         (response) =>
-          (this.photos = response.data.filter(
+          (this.persistedData.photos = response.data.filter(
             (photo) => photo.albumId == this.$route.params.albumId
           ))
       );
@@ -72,14 +81,16 @@ export default {
   },
   data() {
     return {
-      photos: [],
       persistedData: {
         albums: [],
         albumTitle: "",
         favorites: [],
+        photos: [],
         users: [],
         userInfo: null,
         userName: "",
+        isViewing: false,
+        photoIndex: 0
       },
       albumsAPI: "https://jsonplaceholder.typicode.com/albums",
       photosAPI: "https://jsonplaceholder.typicode.com/photos",

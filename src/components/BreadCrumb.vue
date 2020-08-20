@@ -2,7 +2,7 @@
   <v-container>
     <v-breadcrumbs
       class="ml-0 pl-3 py-2 grey lighten-5"
-      :items="breadCrumbs"
+      :items="items"
     ></v-breadcrumbs>
   </v-container>
 </template>

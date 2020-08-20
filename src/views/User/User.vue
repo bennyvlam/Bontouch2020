@@ -35,7 +35,7 @@
             </v-col>
           </v-row>
           <AlbumGrid
-            title="Album"
+            title="Albums"
             :items="
               persistedData.albums.filter(
                 (album) => album.userId == this.currentDisplayedUser.id
@@ -87,9 +87,11 @@ export default {
         albums: [],
         albumTitle: "",
         favorites: [],
+        photos: [],
         users: [],
         userInfo: null,
         userName: "",
+        isViewing: false
       },
     };
   },

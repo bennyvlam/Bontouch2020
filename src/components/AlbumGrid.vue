@@ -6,7 +6,7 @@
     </div>
     <v-row>
       <v-col cols="12">
-        <v-row justify="space-around">
+        <v-row :justify="justify">
           <!-- <router-link :to="{ name: 'Album' }"> -->
           <v-card
             v-for="(album, index) in items"
@@ -42,9 +42,37 @@ export default {
       return this.$store.getters.getUserName;
     },
   },
+  mounted() {
+    if (this.items.length % 3 != 0) {
+      this.justify = "space-between";
+    }
+  },
   data() {
     return {
       active: false,
+      justify: "space-between",
+      items2: [
+        {
+          userId: 1,
+          id: 1,
+          title: "quidem molestiae enim",
+        },
+        {
+          userId: 1,
+          id: 2,
+          title: "sunt qui excepturi placeat culpa",
+        },
+        {
+          userId: 1,
+          id: 3,
+          title: "omnis laborum odio",
+        },
+        {
+          userId: 1,
+          id: 4,
+          title: "non esse culpa molestiae omnis sed optio",
+        },
+      ],
     };
   },
   methods: {},

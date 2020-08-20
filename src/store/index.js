@@ -1,5 +1,5 @@
 import Vue from "vue";
-import Vuex, { Store } from "vuex";
+import Vuex from "vuex";
 
 Vue.use(Vuex);
 
@@ -10,13 +10,20 @@ export default new Vuex.Store({
     breadCrumbs: [],
     favorites: [],
     persistedData: {},
+    photos: {},
     users: [],
     userInfo: null,
     userName: "",
+    isViewing: false,
   },
   mutations: {
     FETCH_USERS(state, payload) {
       state.users = payload.users;
+    },
+    SET_DISPLAYED_PHOTO(state, payload) {
+      // state.photo = payload.photo;
+      state.photos = payload.photos;
+      state.photoIndex = payload.photoIndex;
     },
     SET_PERSISTED_DATA(state) {
       state.persistedData["users"] = state.users;
@@ -25,6 +32,9 @@ export default new Vuex.Store({
       state.persistedData["userName"] = state.userName;
       state.persistedData["albums"] = state.albums;
       state.persistedData["albumTitle"] = state.albumTitle;
+      state.persistedData["isViewing"] = state.isViewing;
+      state.persistedData["photos"] = state.photos;
+      state.persistedData["photoIndex"] = state.photoIndex;
 
       let storedData = JSON.parse(localStorage.getItem("persistedData"));
       if (!storedData) storedData = {};
@@ -35,15 +45,21 @@ export default new Vuex.Store({
       storedData["userName"] = state.userName;
       storedData["albums"] = state.albums;
       storedData["albumTitle"] = state.albumTitle;
+      storedData["isViewing"] = state.isViewing;
+      storedData["photos"] = state.photos;
+      storedData["photoIndex"] = state.photoIndex;
       localStorage.setItem("persistedData", JSON.stringify(storedData));
     },
     SET_STATE_DATA(state, payload) {
       state.users = payload.data.users;
       state.favorites = payload.data.favorites;
       state.userInfo = payload.data.userInfo;
-      state.userName = payload.data.userInfo.name.split(/[\s,\.]+/).join("");
+      state.userName = payload.data.userInfo.name.split(/[\s,.]+/).join("");
       state.albums = payload.data.albums;
       state.albumTitle = payload.data.albumTitle;
+      state.isViewing = payload.data.isViewing;
+      state.photos = payload.data.photos;
+      state.photoIndex = payload.data.photoIndex;
     },
     SET_USERS_AND_FAVORITES(state, payload) {
       if (state.users.some((user) => user.id === payload.userId)) {
@@ -56,6 +72,9 @@ export default new Vuex.Store({
     },
     SET_USER_INFO(state, payload) {
       state.userInfo = payload.user;
+    },
+    SET_VIEW(state, payload) {
+      state.isViewing = payload.isViewing;
     },
     SORT_ARRAY(state, sortKey) {
       const favorites = this.state.favorites;
@@ -89,6 +108,9 @@ export default new Vuex.Store({
     setCurrentUser: ({ commit }, payload) => {
       commit("SET_USER_INFO", payload);
     },
+    setDisplayedPhoto: ({ commit }, payload) => {
+      commit("SET_DISPLAYED_PHOTO", payload);
+    },
     setPersistedData: ({ commit }) => {
       commit("SET_PERSISTED_DATA");
     },
@@ -98,6 +120,9 @@ export default new Vuex.Store({
     setUsersAndFavorites: ({ commit }, payload) => {
       commit("SET_USERS_AND_FAVORITES", payload);
       commit("SORT_ARRAY", "name");
+    },
+    setView: ({ commit }, payload) => {
+      commit("SET_VIEW", payload);
     },
   },
   getters: {
@@ -117,17 +142,20 @@ export default new Vuex.Store({
       };
       return data;
     },
-    getFavorites: (state) => {
-      return state.favorites;
+    getPhotos: (state) => {
+      return state.photos;
+    },
+    getPhotoIndex: (state) => {
+      return state.photoIndex;
     },
     getUser: (state) => {
       return state.userInfo;
     },
-    getUsers: (state) => {
-      return state.users;
-    },
     getUserName: (state) => {
       return state.userName;
+    },
+    getViewState: (state) => {
+      return state.isViewing;
     },
   },
 });

@@ -9,9 +9,9 @@
             class="mb-4"
           ></BreadCrumb>
           <!-- Favorites -->
-          <UserGrid :title="titleFavorites" :items="favoritesList"></UserGrid>
+          <UserGrid :title="titleFavorites" :items="list.favorites"></UserGrid>
           <!-- Users -->
-          <UserGrid :title="titleUsers" :items="usersList"></UserGrid>
+          <UserGrid :title="titleUsers" :items="list.users"></UserGrid>
         </v-col>
       </v-row>
     </v-container>
@@ -49,16 +49,13 @@ export default {
         this.$store.commit("FETCH_USERS", {
           users: this.persistedData.users,
         });
-        this.$store.commit("sortArray", "name");
+        this.$store.commit("SORT_ARRAY", "name");
       }
     });
   },
   computed: {
-    usersList() {
-      return this.$store.getters.getUsers;
-    },
-    favoritesList() {
-      return this.$store.getters.getFavorites;
+    list() {
+      return this.$store.getters.getData;
     },
   },
   methods: {
@@ -73,9 +70,11 @@ export default {
         albums: [],
         albumTitle: "",
         favorites: [],
+        photos: [],
         users: [],
         userInfo: null,
         userName: "",
+        isViewing: false
       },
       titleFavorites: "Favorites",
       titleUsers: "Users",
