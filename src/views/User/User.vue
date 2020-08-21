@@ -6,6 +6,8 @@
           <!-- Breadcrumb -->
           <BreadCrumb
             :currentRoute="this.$route.name"
+            :userName="currentDisplayedUser.name"
+            albumName="empty"
             class="mb-4"
           ></BreadCrumb>
           <v-row>
@@ -63,6 +65,9 @@ export default {
     currentDisplayedUser() {
       return this.$store.getters.getUser;
     },
+    getData() {
+      return this.$store.getters.getData;
+    },
   },
   created() {
     const storedData = this.openStorage();
@@ -91,7 +96,7 @@ export default {
         users: [],
         userInfo: null,
         userName: "",
-        isViewing: false
+        isViewing: false,
       },
     };
   },

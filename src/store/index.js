@@ -139,6 +139,7 @@ export default new Vuex.Store({
       var data = {
         users: state.users,
         favorites: state.favorites,
+        persistedData: state.persistedData
       };
       return data;
     },

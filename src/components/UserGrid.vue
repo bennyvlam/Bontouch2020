@@ -17,7 +17,10 @@
               min-width="260px"
               color="blue lighten-4"
               @click.native="goTo(user, index)"
-              :to="'/users/' + user.name.split(/[\s,\.]+/).join('')"
+              :to="{
+                name: 'user',
+                params: { userId: userName },
+              }"
             >
               <v-row class="ma-0 pa-0">
                 <v-col class="ma-0 pa-0 mr-auto" cols="auto">
@@ -71,6 +74,11 @@ export default {
     return {
       active: false,
     };
+  },
+  computed: {
+    userName() {
+      return this.$store.getters.getUserName;
+    },
   },
   methods: {
     goTo(user, index) {

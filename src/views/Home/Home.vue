@@ -6,6 +6,8 @@
           <!-- Breadcrumb -->
           <BreadCrumb
             :currentRoute="this.$route.name"
+            userName=""
+            albumName=""
             class="mb-4"
           ></BreadCrumb>
           <!-- Favorites -->
@@ -51,10 +53,14 @@ export default {
         });
         this.$store.commit("SORT_ARRAY", "name");
       }
+      this.$store.dispatch("setStateData", { data: this.persistedData });
     });
   },
   computed: {
     list() {
+      return this.$store.getters.getData;
+    },
+    getData() {
       return this.$store.getters.getData;
     },
   },
@@ -74,7 +80,7 @@ export default {
         users: [],
         userInfo: null,
         userName: "",
-        isViewing: false
+        isViewing: false,
       },
       titleFavorites: "Favorites",
       titleUsers: "Users",

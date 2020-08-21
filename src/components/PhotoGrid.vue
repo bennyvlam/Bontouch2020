@@ -36,13 +36,13 @@
                 <!-- Next/previous controls -->
                 <v-icon
                   large
-                  class="prev py-2"
+                  class="prev"
                   @click.prevent="openPhoto(photoIndex - 1)"
                   >keyboard_arrow_left</v-icon
                 >
                 <v-icon
                   large
-                  class="next py-2"
+                  class="next"
                   @click.prevent="openPhoto(photoIndex + 1)"
                   >keyboard_arrow_right</v-icon
                 >
@@ -182,11 +182,11 @@ h2 {
 .prev,
 .next {
   cursor: pointer;
-  position: absolute;
-  top: 40%;
+  position: fixed;
   color: white;
   font-weight: bold;
   transition: 0.6s ease;
+  top: 40%;
 }
 
 .next {
@@ -201,6 +201,6 @@ h2 {
 
 .prev:hover,
 .next:hover {
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 </style>

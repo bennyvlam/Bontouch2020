@@ -10,52 +10,92 @@
 <script>
 export default {
   name: "BreadCrumb",
-  props: ["currentRoute"],
-  computed: {
-    breadCrumbs() {
-      return this.$store.getters.getBreadCrumbs;
-    }
+  props: ["currentRoute", "userName", "albumName"],
+  watch: {
+    userName: {
+      handler: function() {
+        this.setBreadCrumbs();
+      },
+      immediate: true,
+    },
+    albumName: {
+      handler: function() {
+        this.setBreadCrumbs();
+      },
+      immediate: true,
+    },
   },
   mounted() {
-    var i;
-    if (this.currentRoute == "home") {
-      for (i = 0; i < this.items.length; i++) {
-        this.items[i].disabled = false;
-      }
-      this.items[0].disabled = true;
-    } else if (this.currentRoute == "user") {
-      for (i = 0; i < this.items.length; i++) {
-        this.items[i].disabled = false;
-      }
-      this.items[1].disabled = true;
-    } else if (this.currentRoute == "album") {
-      for (i = 0; i < this.items.length; i++) {
-        this.items[i].disabled = false;
-      }
-      this.items[2].disabled = true;
-    }
+    this.setBreadCrumbs();
   },
   data: () => ({
-    items: [
-      {
-        text: "Users",
-        exact: true,
-        disabled: false,
-        to: "/users",
-      },
-      {
-        text: "a",
-        exact: true,
-        disabled: false,
-        to: "/users/Benny",
-      },
-      {
-        text: "this.albumName",
-        exact: true,
-        disabled: false,
-        to: "/users/USERNAME/albums/0",
-      },
-    ],
+    items: [],
   }),
+  methods: {
+    setBreadCrumbs() {
+      if (this.currentRoute == "home") {
+        this.items = [
+          {
+            text: "Users",
+            exact: true,
+            disabled: false,
+            to: "/users",
+          },
+        ];
+      } else if (this.currentRoute == "user") {
+        this.items = [
+          {
+            text: "Users",
+            exact: true,
+            disabled: false,
+            to: "/users",
+          },
+          {
+            text: this.userName.toString(),
+            exact: true,
+            disabled: true,
+            to:
+              "/users/" +
+              this.userName
+                .toString()
+                .split(/[\s,.]+/)
+                .join(""),
+          },
+        ];
+      } else if (this.currentRoute == "album") {
+        this.items = [
+          {
+            text: "Users",
+            exact: true,
+            disabled: false,
+            to: "/users",
+          },
+          {
+            text: this.userName.toString(),
+            exact: true,
+            disabled: false,
+            to:
+              "/users/" +
+              this.userName
+                .toString()
+                .split(/[\s,.]+/)
+                .join(""),
+          },
+          {
+            text: this.albumName.toString(),
+            exact: true,
+            disabled: true,
+            to:
+              "/users/" +
+              this.albumName
+                .toString()
+                .split(/[\s,.]+/)
+                .join("") +
+              "/",
+          },
+        ];
+      }
+    },
+  },
 };
 </script>

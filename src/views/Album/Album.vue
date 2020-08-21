@@ -6,6 +6,8 @@
           <!-- Breadcrumb -->
           <BreadCrumb
             :currentRoute="this.$route.name"
+            :userName="getData.persistedData.userInfo.name"
+            :albumName="albumTitle"
             class="mb-4"
           ></BreadCrumb>
           <v-row>
@@ -47,6 +49,9 @@ export default {
     },
     isViewing() {
       return this.$store.getters.getViewState;
+    },
+    getData() {
+      return this.$store.getters.getData;
     },
   },
   created() {
@@ -90,7 +95,7 @@ export default {
         userInfo: null,
         userName: "",
         isViewing: false,
-        photoIndex: 0
+        photoIndex: 0,
       },
       albumsAPI: "https://jsonplaceholder.typicode.com/albums",
       photosAPI: "https://jsonplaceholder.typicode.com/photos",
