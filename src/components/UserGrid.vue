@@ -7,7 +7,7 @@
     <v-container fluid>
       <v-row>
         <v-col cols="12">
-          <v-row justify="space-between">
+          <v-row :justify="justify">
             <v-card
               v-for="(user, index) in items"
               :key="index"
@@ -19,7 +19,12 @@
               @click.native="goTo(user, index)"
               :to="{
                 name: 'user',
-                params: { userId: userName },
+                params: {
+                  userId: user.name
+                    .toString()
+                    .split(/[\s,.]+/)
+                    .join(''),
+                },
               }"
             >
               <v-row class="ma-0 pa-0">
@@ -73,7 +78,13 @@ export default {
   data() {
     return {
       active: false,
+      justify: "space-between"
     };
+  },
+  mounted() {
+    if (this.items.length % 3 != 0) {
+      this.justify = "start";
+    }
   },
   computed: {
     userName() {

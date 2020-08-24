@@ -37,9 +37,21 @@
 export default {
   name: "AlbumGrid",
   props: ["title", "items"],
+  // watch: {
+  //   userName: {
+  //     handler: function() {
+  //       if (this.userName != this.$route.params.userId.toString()) {
+  //         alert(this.userName);
+  //         this.userName = this.$route.params.userId.toString();
+  //       }
+  //     },
+  //     immediate: true
+  //   }
+  // },
   computed: {
     userName() {
-      return this.$store.getters.getUserName;
+      if (this.$route.params.userId === undefined) return "userId";
+      return this.$route.params.userId.toString();
     },
   },
   mounted() {
