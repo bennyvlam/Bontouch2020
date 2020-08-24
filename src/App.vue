@@ -1,9 +1,7 @@
 <template>
   <v-app>
     <v-main>
-      <keep-alive include="User">
-        <router-view></router-view>
-      </keep-alive>
+      <router-view></router-view>
     </v-main>
   </v-app>
 </template>

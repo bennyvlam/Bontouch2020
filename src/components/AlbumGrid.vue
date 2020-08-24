@@ -7,7 +7,6 @@
     <v-row>
       <v-col cols="12">
         <v-row :justify="justify">
-          <!-- <router-link :to="{ name: 'Album' }"> -->
           <v-card
             v-for="(album, index) in items"
             :key="index"
@@ -27,7 +26,6 @@
               album.title
             }}</v-card-text>
           </v-card>
-          <!-- </router-link> -->
         </v-row>
       </v-col>
     </v-row>
@@ -44,15 +42,17 @@ export default {
       return this.$route.params.userId.toString();
     },
   },
-  mounted() {
-    if (this.items.length % 3 != 0) {
-      this.justify = "start";
-    }
+  watch: {
+    items: function(items) {
+      if (items.length % 3 != 0) {
+        this.justify = "start";
+      }
+    },
   },
   data() {
     return {
       active: false,
-      justify: "space-between",
+      justify: "space-around",
     };
   },
   methods: {
@@ -60,6 +60,11 @@ export default {
       this.$store.dispatch("setView", { isViewing: false });
       this.$store.dispatch("setPersistedData");
     },
+  },
+  mounted() {
+    if (this.items.length % 3 != 0) {
+      this.justify = "start";
+    }
   },
 };
 </script>

@@ -11,9 +11,9 @@
             class="mb-4"
           ></BreadCrumb>
           <!-- Favorites -->
-          <UserGrid :title="titleFavorites" :items="list.favorites"></UserGrid>
+          <UserGrid title="Favorites" :items="list.favorites"></UserGrid>
           <!-- Users -->
-          <UserGrid :title="titleUsers" :items="list.users"></UserGrid>
+          <UserGrid title="Users" :items="list.users"></UserGrid>
         </v-col>
       </v-row>
     </v-container>
@@ -31,59 +31,58 @@ export default {
     BreadCrumb,
     UserGrid,
   },
-  created() {
-    const storedData = this.openStorage();
-    if (storedData) {
-      this.persistedData = {
-        ...this.persistedData,
-        ...storedData,
-      };
-      this.$store.dispatch("setStateData", { data: this.persistedData });
-    }
-  },
-  mounted() {
-    alert("hej");
-    this.$store.dispatch("setView", { isViewing: false });
-    this.axios.get(this.usersAPI).then((response) => {
-      this.persistedData.users = response.data;
-      if (
-        this.$store.state.users === undefined ||
-        this.$store.state.users.length == 0
-      ) {
-        this.$store.commit("FETCH_USERS", {
-          users: this.persistedData.users,
-        });
-        this.$store.commit("SORT_ARRAY", "name");
-      }
-    });
-  },
   computed: {
     list() {
       return this.$store.getters.getData;
     },
+  },
+  data() {
+    return {
+      persistedData: {
+        albums: [],
+        albumTitle: "",
+        favorites: [],
+        isViewing: false,
+        photos: [],
+        photoIndex: 0,
+        users: [],
+        userInfo: {},
+        userName: "",
+      },
+    };
   },
   methods: {
     openStorage() {
       return JSON.parse(localStorage.getItem("persistedData"));
     },
   },
-  data() {
-    return {
-      myStorage: null,
-      persistedData: {
-        albums: [],
-        albumTitle: "",
-        favorites: [],
-        photos: [],
-        users: [],
-        userInfo: null,
-        userName: "",
+  mounted() {
+    const storedData = this.openStorage();
+    if (storedData) {
+      this.persistedData = {
+        ...this.persistedData,
+        ...storedData,
+      };
+
+      this.$store.dispatch("setStateData", {
+        data: this.persistedData,
         isViewing: false,
-      },
-      titleFavorites: "Favorites",
-      titleUsers: "Users",
-      usersAPI: "https://jsonplaceholder.typicode.com/users",
-    };
+      });
+    }
+    this.axios
+      .get("https://jsonplaceholder.typicode.com/users")
+      .then((response) => {
+        if (
+          this.$store.state.users === undefined ||
+          this.$store.state.users.length == 0
+        ) {
+          this.$store.commit("SET_USERS", {
+            users: response.data,
+          });
+          this.$store.commit("SORT_ARRAY", "name");
+        }
+        this.$store.dispatch("setPersistedData");
+      });
   },
 };
 </script>

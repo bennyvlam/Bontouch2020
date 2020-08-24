@@ -27,11 +27,7 @@
             <div v-if="isViewing" class="photoPreview">
               <v-icon class="close" @click.prevent="closePhoto()">cross</v-icon>
               <div class="photoPreview-content">
-                <img
-                  :src="displayedPhoto"
-                  style="width:100%"
-                  class="mb-5"
-                />
+                <img :src="displayedPhoto" style="width:100%" class="mb-5" />
                 <!-- Next/previous controls -->
                 <v-icon
                   large
@@ -69,41 +65,44 @@ export default {
     displayedPhoto() {
       return this.photos[this.photoIndex].url;
     },
-  },
-  created() {
-    const storedData = this.openStorage();
-    if (storedData) {
-      this.persistedData = {
-        ...this.persistedData,
-        ...storedData,
-      };
-      // this.$store.dispatch("setStateData", { data: this.persistedData });
-      // this.$store.dispatch("setPersistedData");
-      this.photoIndex = this.persistedData.photoIndex;
+    photoIndex() {
+      return this.$store.getters.getPhotoIndex;
     }
   },
-  mounted() {
-    if (this.items.length % 4 != 0) {
-      this.justify = "start";
-    }
+  watch: {
+    items: function(items) {
+      if (items.length % 4 != 0) {
+        this.justify = "start";
+      }
+    },
   },
+  // mounted() {
+  //   this.$store.dispatch("setPersistedData");
+  //   const storedData = this.openStorage();
+  //   if (storedData) {
+  //     this.persistedData = {
+  //       ...this.persistedData,
+  //       ...storedData,
+  //     };
+  //     // this.$store.dispatch("setStateData", { data: this.persistedData });
+  //     this.photoIndex = this.persistedData.photoIndex;
+  //   }
+  // },
   data() {
     return {
       photo: "",
-      photoIndex: 0,
       active: false,
-      justify: "space-between",
-      slideIndex: 0,
+      justify: "space-around",
       persistedData: {
         albums: [],
         albumTitle: "",
         favorites: [],
-        photos: [],
-        users: [],
-        userInfo: null,
-        userName: "",
         isViewing: false,
+        photos: [],
         photoIndex: 0,
+        users: [],
+        userInfo: {},
+        userName: "",
       },
     };
   },
@@ -113,7 +112,7 @@ export default {
       this.$store.dispatch("setView", { isViewing: true });
       if (index < 0) index = 0;
       if (index > this.items.length - 1) index = this.items.length - 1;
-      this.photoIndex = index;
+      // this.photoIndex = index;
       this.$store.dispatch("setDisplayedPhoto", {
         photos: this.items,
         photoIndex: index,
@@ -128,6 +127,11 @@ export default {
     openStorage() {
       return JSON.parse(localStorage.getItem("persistedData"));
     },
+  },
+  mounted() {
+    if (this.items.length % 4 != 0) {
+      this.justify = "start";
+    }
   },
 };
 </script>

@@ -75,21 +75,23 @@
 export default {
   name: "UserGrid",
   props: ["title", "items", "index"],
-  data() {
-    return {
-      active: false,
-      justify: "space-between"
-    };
-  },
-  mounted() {
-    if (this.items.length % 3 != 0) {
-      this.justify = "start";
-    }
-  },
   computed: {
     userName() {
       return this.$store.getters.getUserName;
     },
+  },
+  watch: {
+    items: function(items) {
+      if (items.length % 3 != 0) {
+        this.justify = "start";
+      }
+    }
+  },
+  data() {
+    return {
+      active: false,
+      justify: "space-around",
+    };
   },
   methods: {
     goTo(user, index) {

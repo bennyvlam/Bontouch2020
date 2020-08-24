@@ -7,59 +7,61 @@ export default new Vuex.Store({
   state: {
     albums: [],
     albumTitle: "",
-    breadCrumbs: [],
     favorites: [],
     persistedData: {},
     photos: {},
+    photoIndex: 0,
     users: [],
-    userInfo: null,
+    userInfo: {},
     userName: "",
     isViewing: false,
   },
   mutations: {
-    FETCH_USERS(state, payload) {
+    SET_USERS(state, payload) {
       state.users = payload.users;
     },
+    SET_ALBUMS(state, payload) {
+      state.albums = payload.albums;
+    },
     SET_DISPLAYED_PHOTO(state, payload) {
-      // state.photo = payload.photo;
       state.photos = payload.photos;
       state.photoIndex = payload.photoIndex;
     },
     SET_PERSISTED_DATA(state) {
-      state.persistedData["users"] = state.users;
-      state.persistedData["favorites"] = state.favorites;
-      state.persistedData["userInfo"] = state.userInfo;
-      state.persistedData["userName"] = state.userName;
       state.persistedData["albums"] = state.albums;
       state.persistedData["albumTitle"] = state.albumTitle;
+      state.persistedData["favorites"] = state.favorites;
       state.persistedData["isViewing"] = state.isViewing;
       state.persistedData["photos"] = state.photos;
       state.persistedData["photoIndex"] = state.photoIndex;
+      state.persistedData["users"] = state.users;
+      state.persistedData["userInfo"] = state.userInfo;
+      state.persistedData["userName"] = state.userName;
 
       let storedData = JSON.parse(localStorage.getItem("persistedData"));
       if (!storedData) storedData = {};
 
-      storedData["users"] = state.users;
-      storedData["favorites"] = state.favorites;
-      storedData["userInfo"] = state.userInfo;
-      storedData["userName"] = state.userName;
       storedData["albums"] = state.albums;
       storedData["albumTitle"] = state.albumTitle;
+      storedData["favorites"] = state.favorites;
       storedData["isViewing"] = state.isViewing;
       storedData["photos"] = state.photos;
       storedData["photoIndex"] = state.photoIndex;
+      storedData["users"] = state.users;
+      storedData["userInfo"] = state.userInfo;
+      storedData["userName"] = state.userName;
       localStorage.setItem("persistedData", JSON.stringify(storedData));
     },
     SET_STATE_DATA(state, payload) {
-      state.users = payload.data.users;
-      state.favorites = payload.data.favorites;
-      state.userInfo = payload.data.userInfo;
-      state.userName = payload.data.userInfo.name.split(/[\s,.]+/).join("");
       state.albums = payload.data.albums;
       state.albumTitle = payload.data.albumTitle;
-      state.isViewing = payload.data.isViewing;
+      state.favorites = payload.data.favorites;
+      state.isViewing = payload.isViewing;
       state.photos = payload.data.photos;
       state.photoIndex = payload.data.photoIndex;
+      state.users = payload.data.users;
+      state.userInfo = payload.data.userInfo;
+      state.userName = payload.data.userInfo.name.split(/[\s,.]+/).join("");
     },
     SET_USERS_AND_FAVORITES(state, payload) {
       if (state.users.some((user) => user.id === payload.userId)) {
@@ -75,9 +77,7 @@ export default new Vuex.Store({
       state.userName = payload.user.name.split(/[\s,.]+/).join("");
     },
     SET_VIEW(state, payload) {
-      alert("before: " + state.isViewing);
       state.isViewing = payload.isViewing;
-      alert("after: " + state.isViewing);
     },
     SORT_ARRAY(state, sortKey) {
       const favorites = this.state.favorites;
@@ -105,9 +105,6 @@ export default new Vuex.Store({
     },
   },
   actions: {
-    setBreadCrumbs: ({ commit }, payload) => {
-      commit("SET_BREAD_CRUMBS", payload);
-    },
     setCurrentUser: ({ commit }, payload) => {
       commit("SET_USER_INFO", payload);
     },
@@ -135,14 +132,13 @@ export default new Vuex.Store({
     getAlbumTitle: (state) => {
       return state.albumTitle;
     },
-    getBreadCrumbs: (state) => {
-      return state.breadCrumbs;
-    },
     getData: (state) => {
       var data = {
         users: state.users,
         favorites: state.favorites,
-        persistedData: state.persistedData
+        persistedData: state.persistedData,
+        userInfo: state.userInfo,
+        albums: state.albums,
       };
       return data;
     },

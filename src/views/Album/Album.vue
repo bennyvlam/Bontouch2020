@@ -6,7 +6,7 @@
           <!-- Breadcrumb -->
           <BreadCrumb
             :currentRoute="this.$route.name"
-            :userName="getData.persistedData.userInfo.name"
+            :userName="getData.userInfo.name"
             :albumName="albumTitle"
             class="mb-4"
           ></BreadCrumb>
@@ -54,57 +54,61 @@ export default {
       return this.$store.getters.getData;
     },
   },
-  created() {
-    const storedData = this.openStorage();
-    if (storedData) {
-      this.persistedData = {
-        ...this.persistedData,
-        ...storedData,
-      };
-      this.$store.dispatch("setStateData", { data: this.persistedData });
-      this.$store.dispatch("setPersistedData");
-    }
-  },
-  mounted() {
-    this.axios
-      .get(this.photosAPI)
-      .then(
-        (response) =>
-          (this.persistedData.photos = response.data.filter(
-            (photo) => photo.albumId == this.$route.params.albumId
-          ))
-      );
-    this.axios.get(this.albumsAPI).then((response) => {
-      this.persistedData.albums = response.data;
-      this.persistedData.albumTitle = response.data.filter(
-        (album) =>
-          album.userId == this.currentDisplayedUser.id &&
-          album.id == this.$route.params.albumId
-      )[0].title;
-      this.$store.dispatch("setStateData", { data: this.persistedData });
-    });
-  },
   data() {
     return {
       persistedData: {
         albums: [],
         albumTitle: "",
         favorites: [],
-        photos: [],
-        users: [],
-        userInfo: null,
-        userName: "",
         isViewing: false,
+        photos: [],
         photoIndex: 0,
+        users: [],
+        userInfo: {},
+        userName: "",
       },
-      albumsAPI: "https://jsonplaceholder.typicode.com/albums",
-      photosAPI: "https://jsonplaceholder.typicode.com/photos",
     };
   },
   methods: {
     openStorage() {
       return JSON.parse(localStorage.getItem("persistedData"));
     },
+  },
+  mounted() {
+    const storedData = this.openStorage();
+    if (storedData) {
+      this.persistedData = {
+        ...this.persistedData,
+        ...storedData,
+      };
+      this.$store.dispatch("setStateData", {
+        data: this.persistedData,
+        isViewing: this.persistedData.isViewing,
+      });
+    }
+
+    this.axios
+      .get("https://jsonplaceholder.typicode.com/photos")
+      .then(
+        (response) =>
+          (this.persistedData.photos = response.data.filter(
+            (photo) => photo.albumId == this.$route.params.albumId
+          ))
+      );
+    this.axios
+      .get("https://jsonplaceholder.typicode.com/albums")
+      .then((response) => {
+        this.persistedData.albums = response.data;
+        this.persistedData.albumTitle = response.data.filter(
+          (album) =>
+            album.userId == this.currentDisplayedUser.id &&
+            album.id == this.$route.params.albumId
+        )[0].title;
+        this.$store.dispatch("setStateData", {
+          data: this.persistedData,
+          isViewing: this.persistedData.isViewing,
+        });
+      });
   },
 };
 </script>
