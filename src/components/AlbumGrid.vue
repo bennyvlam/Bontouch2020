@@ -17,6 +17,7 @@
             min-width="260px"
             max-width="260px"
             color="blue lighten-4"
+            @click="setView"
             :to="{
               name: 'album',
               params: { userId: userName, albumId: album.id },
@@ -37,17 +38,6 @@
 export default {
   name: "AlbumGrid",
   props: ["title", "items"],
-  // watch: {
-  //   userName: {
-  //     handler: function() {
-  //       if (this.userName != this.$route.params.userId.toString()) {
-  //         alert(this.userName);
-  //         this.userName = this.$route.params.userId.toString();
-  //       }
-  //     },
-  //     immediate: true
-  //   }
-  // },
   computed: {
     userName() {
       if (this.$route.params.userId === undefined) return "userId";
@@ -87,7 +77,12 @@ export default {
       ],
     };
   },
-  methods: {},
+  methods: {
+    setView() {
+      this.$store.dispatch("setView", { isViewing: false });
+      this.$store.dispatch("setPersistedData");
+    },
+  },
 };
 </script>
 <style scoped>

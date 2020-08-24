@@ -53,14 +53,11 @@ export default {
         });
         this.$store.commit("SORT_ARRAY", "name");
       }
-      this.$store.dispatch("setStateData", { data: this.persistedData });
+      // this.$store.dispatch("setStateData", { data: this.persistedData });
     });
   },
   computed: {
     list() {
-      return this.$store.getters.getData;
-    },
-    getData() {
       return this.$store.getters.getData;
     },
   },

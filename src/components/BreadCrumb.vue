@@ -24,6 +24,9 @@ export default {
       },
       immediate: true,
     },
+    currentRoute: function() {
+      this.setBreadCrumbs();
+    },
   },
   mounted() {
     this.setBreadCrumbs();
@@ -34,6 +37,7 @@ export default {
   methods: {
     setBreadCrumbs() {
       if (this.currentRoute == "home") {
+        this.$store.dispatch("setView", { isViewing: false });
         this.items = [
           {
             text: "Users",
@@ -43,6 +47,7 @@ export default {
           },
         ];
       } else if (this.currentRoute == "user") {
+        this.$store.dispatch("setView", { isViewing: false });
         this.items = [
           {
             text: "Users",

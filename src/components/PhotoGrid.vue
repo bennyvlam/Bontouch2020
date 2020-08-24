@@ -30,7 +30,6 @@
                 <img
                   :src="displayedPhoto"
                   style="width:100%"
-                  @click.prevent="alert('hej')"
                   class="mb-5"
                 />
                 <!-- Next/previous controls -->
@@ -150,7 +149,7 @@ h2 {
 
 .photoPreview {
   position: fixed;
-  padding-top: 100px;
+  padding-top: 70px;
   left: 0;
   top: 0;
   width: 100%;
