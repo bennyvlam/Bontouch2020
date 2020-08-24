@@ -77,8 +77,8 @@ export default {
         ...this.persistedData,
         ...storedData,
       };
-      this.$store.dispatch("setStateData", { data: this.persistedData });
-      this.$store.dispatch("setPersistedData");
+      // this.$store.dispatch("setStateData", { data: this.persistedData });
+      // this.$store.dispatch("setPersistedData");
       this.photoIndex = this.persistedData.photoIndex;
     }
   },

@@ -72,9 +72,12 @@ export default new Vuex.Store({
     },
     SET_USER_INFO(state, payload) {
       state.userInfo = payload.user;
+      state.userName = payload.user.name.split(/[\s,.]+/).join("");
     },
     SET_VIEW(state, payload) {
+      alert("before: " + state.isViewing);
       state.isViewing = payload.isViewing;
+      alert("after: " + state.isViewing);
     },
     SORT_ARRAY(state, sortKey) {
       const favorites = this.state.favorites;

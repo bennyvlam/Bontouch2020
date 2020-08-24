@@ -42,6 +42,8 @@ export default {
     }
   },
   mounted() {
+    alert("hej");
+    this.$store.dispatch("setView", { isViewing: false });
     this.axios.get(this.usersAPI).then((response) => {
       this.persistedData.users = response.data;
       if (
@@ -53,7 +55,6 @@ export default {
         });
         this.$store.commit("SORT_ARRAY", "name");
       }
-      // this.$store.dispatch("setStateData", { data: this.persistedData });
     });
   },
   computed: {

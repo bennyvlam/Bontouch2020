@@ -4,6 +4,7 @@
       <v-row align="center" justify="center">
         <v-col cols="12" sm="12" md="9">
           <!-- Breadcrumb -->
+          <h1>{{ $store.state.userInfo.name }}</h1>
           <BreadCrumb
             :currentRoute="this.$route.name"
             :userName="currentDisplayedUser.name"
@@ -69,6 +70,12 @@ export default {
       return this.$store.getters.getData;
     },
   },
+  // watch: {
+  //   currentDisplayedUser(newUser, oldUser) {
+  //     alert("NEW: " + newUser.name);
+  //     alert("OLD: " + oldUser.name);
+  //   },
+  // },
   created() {
     const storedData = this.openStorage();
     if (storedData) {
@@ -80,10 +87,13 @@ export default {
     }
   },
   mounted() {
-    this.axios.get(this.albumsAPI).then((response) => {
-      this.persistedData.albums = response.data;
-      this.$store.dispatch("setStateData", { data: this.persistedData });
-    });
+    alert("hej");
+    this.$store.dispatch("setView", { isViewing: false }).then(
+      this.axios.get(this.albumsAPI).then((response) => {
+        this.persistedData.albums = response.data;
+        this.$store.dispatch("setStateData", { data: this.persistedData });
+      })
+    );
   },
   data() {
     return {
