@@ -56,6 +56,7 @@ export default {
   },
   data() {
     return {
+      apiPath: "https://jsonplaceholder.typicode.com",
       persistedData: {
         albums: [],
         albumTitle: "",
@@ -88,7 +89,7 @@ export default {
     }
 
     this.axios
-      .get("https://jsonplaceholder.typicode.com/photos")
+      .get(this.apiPath + "/photos")
       .then(
         (response) =>
           (this.persistedData.photos = response.data.filter(
@@ -96,7 +97,7 @@ export default {
           ))
       );
     this.axios
-      .get("https://jsonplaceholder.typicode.com/albums")
+      .get(this.apiPath + "/albums")
       .then((response) => {
         this.persistedData.albums = response.data;
         this.persistedData.albumTitle = response.data.filter(

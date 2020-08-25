@@ -38,6 +38,7 @@ export default {
   },
   data() {
     return {
+      apiPath: "https://jsonplaceholder.typicode.com",
       persistedData: {
         albums: [],
         albumTitle: "",
@@ -69,20 +70,18 @@ export default {
         isViewing: false,
       });
     }
-    this.axios
-      .get("https://jsonplaceholder.typicode.com/users")
-      .then((response) => {
-        if (
-          this.$store.state.users === undefined ||
-          this.$store.state.users.length == 0
-        ) {
-          this.$store.commit("SET_USERS", {
-            users: response.data,
-          });
-          this.$store.commit("SORT_ARRAY", "name");
-        }
-        this.$store.dispatch("setPersistedData");
-      });
+    this.axios.get(this.apiPath + "/users").then((response) => {
+      if (
+        this.$store.state.users === undefined ||
+        this.$store.state.users.length == 0
+      ) {
+        this.$store.commit("SET_USERS", {
+          users: response.data,
+        });
+        this.$store.commit("SORT_ARRAY", "name");
+      }
+      this.$store.dispatch("setPersistedData");
+    });
   },
 };
 </script>
