@@ -5,10 +5,11 @@ import Home from "../views/Home/Home.vue";
 Vue.use(VueRouter);
 
 const routes = [
+  { path: "/", redirect: "/users" },
   {
     path: "/users",
     name: "home",
-    component: Home
+    component: Home,
   },
   {
     path: "/users/:userId",
@@ -18,7 +19,7 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/User/User.vue")
+      import(/* webpackChunkName: "about" */ "../views/User/User.vue"),
   },
   {
     path: "/users/:userId/albums/:albumId",
@@ -28,14 +29,14 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () =>
-      import(/* webpackChunkName: "about" */ "../views/Album/Album.vue")
-  }
+      import(/* webpackChunkName: "about" */ "../views/Album/Album.vue"),
+  },
 ];
 
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
-  routes
+  routes,
 });
 
 export default router;
