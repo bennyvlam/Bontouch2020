@@ -59,12 +59,10 @@ export default {
               text: this.userName.toString(),
               exact: true,
               disabled: true,
-              to:
-                "/users/" +
-                this.userName
-                  .toString()
-                  .split(/[\s,.]+/)
-                  .join(""),
+              to: `/users/${this.userName
+                .toString()
+                .split(/[\s,.]+/)
+                .join("")}`,
             },
           ];
           break;
@@ -80,24 +78,15 @@ export default {
               text: this.userName.toString(),
               exact: true,
               disabled: false,
-              to:
-                "/users/" +
-                this.userName
-                  .toString()
-                  .split(/[\s,.]+/)
-                  .join(""),
+              to: `/users/${this.userName
+                .toString()
+                .split(/[\s,.]+/)
+                .join("")}`,
             },
             {
               text: this.albumName.toString(),
               exact: true,
               disabled: true,
-              to:
-                "/users/" +
-                this.albumName
-                  .toString()
-                  .split(/[\s,.]+/)
-                  .join("") +
-                "/",
             },
           ];
           break;

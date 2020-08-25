@@ -26,11 +26,9 @@
                 <span class="gray--text">–</span>
                 <span
                   >{{
-                    currentDisplayedUser.address.street +
-                      ", " +
-                      currentDisplayedUser.address.zipcode +
-                      " " +
-                      currentDisplayedUser.address.city
+                    `${currentDisplayedUser.address.street}, 
+                      ${currentDisplayedUser.address.zipcode} 
+                      ${currentDisplayedUser.address.city}`
                   }}
                 </span>
               </v-row>
@@ -102,7 +100,7 @@ export default {
         isViewing: false,
       });
     }
-    this.axios.get(this.apiPath + "/albums").then((response) => {
+    this.axios.get(`${this.apiPath}/albums`).then((response) => {
       if (
         this.$store.state.albums === undefined ||
         this.$store.state.albums.length == 0

@@ -20,10 +20,10 @@
               :to="{
                 name: 'user',
                 params: {
-                  userId: user.name
+                  userId: `${user.name
                     .toString()
                     .split(/[\s,.]+/)
-                    .join(''),
+                    .join('')}`,
                 },
               }"
             >
@@ -85,7 +85,7 @@ export default {
       if (items.length % 3 != 0) {
         this.justify = "start";
       }
-    }
+    },
   },
   data() {
     return {

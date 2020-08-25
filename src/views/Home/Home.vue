@@ -70,7 +70,7 @@ export default {
         isViewing: false,
       });
     }
-    this.axios.get(this.apiPath + "/users").then((response) => {
+    this.axios.get(`${this.apiPath}/users`).then((response) => {
       if (
         this.$store.state.users === undefined ||
         this.$store.state.users.length == 0

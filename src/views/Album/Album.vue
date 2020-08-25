@@ -89,27 +89,25 @@ export default {
     }
 
     this.axios
-      .get(this.apiPath + "/photos")
+      .get(`${this.apiPath}/photos`)
       .then(
         (response) =>
           (this.persistedData.photos = response.data.filter(
             (photo) => photo.albumId == this.$route.params.albumId
           ))
       );
-    this.axios
-      .get(this.apiPath + "/albums")
-      .then((response) => {
-        this.persistedData.albums = response.data;
-        this.persistedData.albumTitle = response.data.filter(
-          (album) =>
-            album.userId == this.currentDisplayedUser.id &&
-            album.id == this.$route.params.albumId
-        )[0].title;
-        this.$store.dispatch("setStateData", {
-          data: this.persistedData,
-          isViewing: this.persistedData.isViewing,
-        });
+    this.axios.get(`${this.apiPath}/albums`).then((response) => {
+      this.persistedData.albums = response.data;
+      this.persistedData.albumTitle = response.data.filter(
+        (album) =>
+          album.userId == this.currentDisplayedUser.id &&
+          album.id == this.$route.params.albumId
+      )[0].title;
+      this.$store.dispatch("setStateData", {
+        data: this.persistedData,
+        isViewing: this.persistedData.isViewing,
       });
+    });
   },
 };
 </script>
