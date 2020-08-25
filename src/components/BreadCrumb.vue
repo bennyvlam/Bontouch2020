@@ -36,67 +36,73 @@ export default {
   }),
   methods: {
     setBreadCrumbs() {
-      if (this.currentRoute == "home") {
-        this.items = [
-          {
-            text: "Users",
-            exact: true,
-            disabled: false,
-            to: "/users",
-          },
-        ];
-      } else if (this.currentRoute == "user") {
-        this.items = [
-          {
-            text: "Users",
-            exact: true,
-            disabled: false,
-            to: "/users",
-          },
-          {
-            text: this.userName.toString(),
-            exact: true,
-            disabled: true,
-            to:
-              "/users/" +
-              this.userName
-                .toString()
-                .split(/[\s,.]+/)
-                .join(""),
-          },
-        ];
-      } else if (this.currentRoute == "album") {
-        this.items = [
-          {
-            text: "Users",
-            exact: true,
-            disabled: false,
-            to: "/users",
-          },
-          {
-            text: this.userName.toString(),
-            exact: true,
-            disabled: false,
-            to:
-              "/users/" +
-              this.userName
-                .toString()
-                .split(/[\s,.]+/)
-                .join(""),
-          },
-          {
-            text: this.albumName.toString(),
-            exact: true,
-            disabled: true,
-            to:
-              "/users/" +
-              this.albumName
-                .toString()
-                .split(/[\s,.]+/)
-                .join("") +
-              "/",
-          },
-        ];
+      switch (this.currentRoute) {
+        case "home":
+          this.items = [
+            {
+              text: "Users",
+              exact: true,
+              disabled: false,
+              to: "/users",
+            },
+          ];
+          break;
+        case "user":
+          this.items = [
+            {
+              text: "Users",
+              exact: true,
+              disabled: false,
+              to: "/users",
+            },
+            {
+              text: this.userName.toString(),
+              exact: true,
+              disabled: true,
+              to:
+                "/users/" +
+                this.userName
+                  .toString()
+                  .split(/[\s,.]+/)
+                  .join(""),
+            },
+          ];
+          break;
+        case "album":
+          this.items = [
+            {
+              text: "Users",
+              exact: true,
+              disabled: false,
+              to: "/users",
+            },
+            {
+              text: this.userName.toString(),
+              exact: true,
+              disabled: false,
+              to:
+                "/users/" +
+                this.userName
+                  .toString()
+                  .split(/[\s,.]+/)
+                  .join(""),
+            },
+            {
+              text: this.albumName.toString(),
+              exact: true,
+              disabled: true,
+              to:
+                "/users/" +
+                this.albumName
+                  .toString()
+                  .split(/[\s,.]+/)
+                  .join("") +
+                "/",
+            },
+          ];
+          break;
+        default:
+          this.items = [];
       }
     },
   },
