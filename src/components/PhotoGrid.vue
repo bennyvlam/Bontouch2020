@@ -7,12 +7,7 @@
           <v-row justify="space-around" class="mb-10">
             <p class="font-italic">{{ items.length }} photos</p>
           </v-row>
-          <h1>{{ gubbePos.x }}</h1>
-          <h1>{{ gubbePos.y }}</h1>
           <v-row :justify="justify">
-            <transition name="expand">
-              <div id="gubbe" :style="style"></div>
-            </transition>
             <v-card
               :id="'photo_' + index"
               v-for="(photo, index) in items"
@@ -24,14 +19,14 @@
               max-width="200px"
               min-height="200px"
               max-height="200px"
-              @click="openPhoto(index), animatePhoto(index)"
+              @click="openPhoto(index), animatePhoto()"
               :img="photo.thumbnailUrl"
             >
             </v-card>
           </v-row>
           <v-row>
-            <transition :id="'anime_' + photoIndex" name="bounce">
-              <div v-if="isViewing" id="photo" class="photoPreview">
+            <transition name="photo-expand">
+              <div v-if="isViewing" id="photoPreview" class="show">
                 <v-icon class="close" @click.prevent="closePhoto(photoIndex)"
                   >cross</v-icon
                 >
@@ -88,6 +83,7 @@ export default {
   },
   data() {
     return {
+      componentKey: 0,
       photo: "",
       active: false,
       justify: "space-around",
@@ -126,70 +122,31 @@ export default {
       this.$store.dispatch("setView", { isViewing: false });
       this.$store.dispatch("setPersistedData");
 
-      var bodyRect = document.body.getBoundingClientRect();
       var element = document.getElementById("photo_" + index);
       var elemRect = element.getBoundingClientRect();
-      var offset_top = elemRect.top - bodyRect.top;
-      var offset_right = elemRect.right - bodyRect.right;
-      var offset_left = elemRect.left - bodyRect.left;
-      var offset_bottom = elemRect.bottom - bodyRect.bottom;
-      alert(
-        index +
-          "\nelem(x,y): (" +
-          elemRect.x +
-          ", " +
-          elemRect.y +
-          ")" +
-          "\noffset_top: " +
-          offset_top +
-          "\noffset_right: " +
-          offset_right +
-          "\noffset_left: " +
-          offset_left +
-          "\noffset_bottom: " +
-          offset_bottom
-      );
-      var gubbe = document.getElementById("gubbe");
-      gubbe.style.left = elemRect.x + "px";
-      gubbe.style.top = elemRect.y + "px";
-      this.gubbePos.x = gubbe.style.left;
-      this.gubbePos.y = gubbe.style.top;
+      var photoPreview = document.getElementById("photoPreview");
+      photoPreview.className = "off";
+      photoPreview.style.left = elemRect.x + "px";
+      photoPreview.style.top = elemRect.y + "px";
+      this.gubbePos.x = photoPreview.style.left;
+      this.gubbePos.y = photoPreview.style.top;
+      photoPreview.style.width = "200px";
+      photoPreview.style.height = "200px";
     },
-    animatePhoto(index) {
-      var bodyRect = document.body.getBoundingClientRect();
-      var element = document.getElementById("photo_" + index);
-      var elemRect = element.getBoundingClientRect();
-      var offset_top = elemRect.top - bodyRect.top;
-      var offset_right = elemRect.right - bodyRect.right;
-      var offset_left = elemRect.left - bodyRect.left;
-      var offset_bottom = elemRect.bottom - bodyRect.bottom;
-      alert(
-        index +
-          "\nelem(x,y): (" +
-          elemRect.x +
-          ", " +
-          elemRect.y +
-          ")" +
-          "\noffset_top: " +
-          offset_top +
-          "\noffset_right: " +
-          offset_right +
-          "\noffset_left: " +
-          offset_left +
-          "\noffset_bottom: " +
-          offset_bottom
-      );
-      var gubbe = document.getElementById("gubbe");
-      gubbe.style.left = elemRect.x + "px";
-      gubbe.style.top = elemRect.y + "px";
-      this.gubbePos.x = gubbe.style.left;
-      this.gubbePos.y = gubbe.style.top;
+    animatePhoto() {
+      var photoPreview = document.getElementById("photoPreview");
+      photoPreview.className = "show";
+      photoPreview.style.width = "100%";
+      photoPreview.style.height = "100%";
+      photoPreview.style.left = "0";
+      photoPreview.style.top = "0";
     },
     openStorage() {
       return JSON.parse(localStorage.getItem("persistedData"));
     },
   },
   mounted() {
+    this.animatePhoto();
     if (this.items.length % 4 != 0) {
       this.justify = "start";
     }
@@ -213,66 +170,28 @@ h2 {
   border-color: white;
 }
 
-.photo-expand-enter-active {
-  transition: all 0.3s ease;
-}
-.photo-expand-leave-active {
-  transition: all 0.8s cubic-bezier(1, 0.5, 0.8, 1);
-}
-.photo-expand-enter, .photo-expand-leave-to
-/* .slide-fade-leave-active below version 2.1.8 */ {
-  transform: translateX(10px);
-  opacity: 0;
+#photoPreview {
+  transition: all 1.5s;
+  height: 200px;
+  width: 200px;
+  opacity: 1;
+  z-index: 1;
+  position: fixed;
 }
 
-.bounce-enter-active {
-  animation: bounce-in 0.5s;
-}
-.bounce-leave-active {
-  animation: bounce-in 0.5s reverse;
-}
-@keyframes bounce-in {
-  0% {
-    transform: scale(0);
-  }
-  50% {
-    transform: scale(1.5);
-  }
-  100% {
-    transform: scale(1);
-  }
+#photoPreview.off {
+  transition: all 1.5s;
+  height: 200px;
+  width: 200px;
+  opacity: 1;
+  z-index: 1;
+  position: fixed;
 }
 
-.expand-enter-active {
-  animation: bounce-in 0.5s;
-}
-.expand-leave-active {
-  animation: bounce-in 0.5s reverse;
-}
-@keyframes bounce-in {
-  0% {
-    transform: scale(0);
-  }
-  50% {
-    transform: scale(1.5);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-.photo {
-  width: 60px;
-  height: 60px;
-}
-
-.photoPreview {
+#photoPreview.show {
+  transition: all 1.5s;
   position: fixed;
   padding-top: 70px;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
   overflow: auto;
   background-color: rgba(0, 0, 0, 0.75);
 }
@@ -320,13 +239,5 @@ h2 {
 .prev:hover,
 .next:hover {
   background-color: rgba(0, 0, 0, 0.5);
-}
-
-#gubbe {
-  height: 200px;
-  width: 200px;
-  background-color: blueviolet;
-  position: fixed;
-  z-index: 1;
 }
 </style>
