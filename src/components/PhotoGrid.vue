@@ -24,15 +24,16 @@
             >
             </v-card>
           </v-row>
+          <!-- Photo-viewer -->
           <v-row>
-            <transition name="photo-expand">
+            <transition>
               <div v-if="isViewing" id="photoPreview" class="show">
                 <v-icon class="close" @click.prevent="closePhoto(photoIndex)"
                   >cross</v-icon
                 >
                 <div class="photoPreviewContent">
                   <img :src="displayedPhoto" style="width:100%" class="mb-5" />
-                  <!-- Next/previous controls -->
+                  <!-- Next/previous buttons -->
                   <v-icon
                     large
                     class="prev"
@@ -98,10 +99,6 @@ export default {
         userInfo: {},
         userName: "",
       },
-      gubbePos: {
-        x: 0,
-        y: 0,
-      },
     };
   },
   methods: {
@@ -128,10 +125,9 @@ export default {
       photoPreview.className = "off";
       photoPreview.style.left = elemRect.x + "px";
       photoPreview.style.top = elemRect.y + "px";
-      this.gubbePos.x = photoPreview.style.left;
-      this.gubbePos.y = photoPreview.style.top;
       photoPreview.style.width = "200px";
       photoPreview.style.height = "200px";
+      photoPreview.style.paddingTop = "0px";
     },
     animatePhoto() {
       var photoPreview = document.getElementById("photoPreview");
@@ -140,6 +136,7 @@ export default {
       photoPreview.style.height = "100%";
       photoPreview.style.left = "0";
       photoPreview.style.top = "0";
+      photoPreview.style.paddingTop = "70px";
     },
     openStorage() {
       return JSON.parse(localStorage.getItem("persistedData"));
@@ -172,19 +169,20 @@ h2 {
 
 #photoPreview {
   transition: all 1.5s;
-  height: 200px;
-  width: 200px;
   opacity: 1;
   z-index: 1;
   position: fixed;
+  left: 0;
+  top: 0;
+  width: 200px;
+  height: 200px;
 }
 
 #photoPreview.off {
   transition: all 1.5s;
-  height: 200px;
-  width: 200px;
   opacity: 1;
   z-index: 1;
+  overflow: auto;
   position: fixed;
 }
 
@@ -193,6 +191,8 @@ h2 {
   position: fixed;
   padding-top: 70px;
   overflow: auto;
+  height: 100%;
+  width: 100%;
   background-color: rgba(0, 0, 0, 0.75);
 }
 
