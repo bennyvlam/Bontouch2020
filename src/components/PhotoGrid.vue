@@ -182,7 +182,7 @@ h2 {
   transition: all 1.5s;
   opacity: 1;
   z-index: 1;
-  overflow: auto;
+  overflow: hidden;
   position: fixed;
 }
 
