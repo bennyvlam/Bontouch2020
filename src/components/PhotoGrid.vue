@@ -189,7 +189,7 @@ h2 {
 #photoPreview.show {
   transition: all 1.5s;
   position: fixed;
-  padding-top: 70px;
+  padding-top: 5%;
   overflow: auto;
   height: 100%;
   width: 100%;
@@ -200,7 +200,9 @@ h2 {
   position: relative;
   margin: auto;
   width: 100%;
-  max-width: 500px;
+  height: 100%;
+  min-width: 35%;
+  max-width: 35%;
 }
 
 .close {
