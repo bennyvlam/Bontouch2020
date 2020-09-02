@@ -31,7 +31,7 @@
                 <v-icon class="close" @click.prevent="closePhoto(photoIndex)"
                   >cross</v-icon
                 >
-                <div class="photoPreviewContent">
+                <div id="photoPreviewContent">
                   <img :src="displayedPhoto" style="width:100%" class="mb-5" />
                   <!-- Next/previous buttons -->
                   <v-icon
@@ -128,6 +128,11 @@ export default {
       photoPreview.style.width = "200px";
       photoPreview.style.height = "200px";
       photoPreview.style.paddingTop = "0px";
+      
+      var photoPreviewContent = document.getElementById("photoPreviewContent");
+      photoPreviewContent.style.maxWidth = "500px";
+      photoPreviewContent.style.height = "0%";
+
     },
     animatePhoto() {
       var photoPreview = document.getElementById("photoPreview");
@@ -136,7 +141,6 @@ export default {
       photoPreview.style.height = "100%";
       photoPreview.style.left = "0";
       photoPreview.style.top = "0";
-      photoPreview.style.paddingTop = "70px";
     },
     openStorage() {
       return JSON.parse(localStorage.getItem("persistedData"));
@@ -196,7 +200,7 @@ h2 {
   background-color: rgba(0, 0, 0, 0.75);
 }
 
-.photoPreviewContent {
+#photoPreviewContent {
   position: relative;
   margin: auto;
   width: 100%;
